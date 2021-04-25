@@ -18,7 +18,6 @@ import org.mockito.Mock;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -69,15 +68,15 @@ class MovieRepositoryImplTest {
     private static final Set<PriceComponentEntity> UPDATE_PRICE_COMPONENT_ENTITIES = Set.of(PRICE_COMPONENT_ENTITY,
             UPDATE_PRICE_COMPONENT_ENTITY);
 
-    private Movie MOVIE;
-    private Movie UPDATE_MOVIE;
-    private List<Movie> MOVIES;
+    private Movie movie;
+    private Movie updateMovie;
+    private List<Movie> movies;
 
-    private MovieEntity MOVIE_ENTITY;
-    private MovieEntity UPDATE_MOVIE_ENTITY;
-    private MovieEntity MOVIE_ENTITY_INVALID;
-    private List<MovieEntity> MOVIE_ENTITIES;
-    private List<MovieEntity> MOVIE_ENTITIES_INVALID;
+    private MovieEntity movieEntity;
+    private MovieEntity updateMovieEntity;
+    private MovieEntity movieEntityInvalid;
+    private List<MovieEntity> movieEntities;
+    private List<MovieEntity> movieEntitiesInvalid;
 
     private static Movie createMovie(String genre, int length, Set<PriceComponent> priceComponents) {
         Movie result = null;
@@ -91,19 +90,19 @@ class MovieRepositoryImplTest {
 
     @BeforeEach
     void init() {
-        MOVIE = createMovie(MOVIE_GENRE, MOVIE_LENGTH, PRICE_COMPONENTS);
-        UPDATE_MOVIE = createMovie(UPDATE_MOVIE_GENRE,
+        movie = createMovie(MOVIE_GENRE, MOVIE_LENGTH, PRICE_COMPONENTS);
+        updateMovie = createMovie(UPDATE_MOVIE_GENRE,
                 UPDATE_MOVIE_LENGTH, UPDATE_PRICE_COMPONENTS);
-        MOVIES = List.of(MOVIE, MOVIE, MOVIE);
-        MOVIE_ENTITY = new MovieEntity(MOVIE_TITLE, MOVIE_GENRE,
+        movies = List.of(movie, movie, movie);
+        movieEntity = new MovieEntity(MOVIE_TITLE, MOVIE_GENRE,
                 MOVIE_LENGTH, PRICE_COMPONENT_ENTITIES);
-       UPDATE_MOVIE_ENTITY = new MovieEntity(MOVIE_TITLE, UPDATE_MOVIE_GENRE,
+        updateMovieEntity = new MovieEntity(MOVIE_TITLE, UPDATE_MOVIE_GENRE,
                 UPDATE_MOVIE_LENGTH, UPDATE_PRICE_COMPONENT_ENTITIES);
-        MOVIE_ENTITY_INVALID = new MovieEntity(MOVIE_TITLE, MOVIE_GENRE,
+        movieEntityInvalid = new MovieEntity(MOVIE_TITLE, MOVIE_GENRE,
                 INVALID_MOVIE_LENGTH, PRICE_COMPONENT_ENTITIES);
-        MOVIE_ENTITIES = List.of(MOVIE_ENTITY, MOVIE_ENTITY, MOVIE_ENTITY);
-        MOVIE_ENTITIES_INVALID = List.of(MOVIE_ENTITY_INVALID,
-                MOVIE_ENTITY_INVALID, MOVIE_ENTITY_INVALID);
+        movieEntities = List.of(movieEntity, movieEntity, movieEntity);
+        movieEntitiesInvalid = List.of(movieEntityInvalid,
+                movieEntityInvalid, movieEntityInvalid);
     }
 
     @Test
@@ -112,44 +111,43 @@ class MovieRepositoryImplTest {
         when(movieDao.findById(any())).thenReturn(Optional.empty());
 
         //When
-        movieRepository.createMovie(MOVIE);
+        movieRepository.createMovie(movie);
 
         //Then
         ArgumentCaptor<MovieEntity> movieEntityArgumentCaptor = ArgumentCaptor.forClass(MovieEntity.class);
         verify(movieDao, times(1)).save(movieEntityArgumentCaptor.capture());
         MovieEntity actual = movieEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(MOVIE_ENTITY));
+        assertThat(actual, equalTo(movieEntity));
     }
 
     @Test
     void testCreateMovieWithMovieAlreadyExitsException() {
         //Given
-        when(movieDao.findById(any())).thenReturn(Optional.of(MOVIE_ENTITY));
+        when(movieDao.findById(any())).thenReturn(Optional.of(movieEntity));
 
         //Then
         assertThrows(MovieAlreadyExistsException.class, () -> {
             //When
-            movieRepository.createMovie(MOVIE);
+            movieRepository.createMovie(movie);
         });
     }
 
     @Test
     void testGetAllMoviesWithoutError() {
         //Given
-        when(movieDao.findAll()).thenReturn(MOVIE_ENTITIES);
+        when(movieDao.findAll()).thenReturn(movieEntities);
 
         //When
         List<Movie> actual = movieRepository.getAllMovies();
 
         //Then
-        assertThat(MOVIES.equals(actual), equalTo(true));
-        //assertThat(actual, equalTo(MOVIES));
+        assertThat(actual, equalTo(movies));
     }
 
     @Test
     void testGetAllMoviesWithMappingProblems() {
         //Given
-        when(movieDao.findAll()).thenReturn(MOVIE_ENTITIES_INVALID);
+        when(movieDao.findAll()).thenReturn(movieEntitiesInvalid);
 
         //When
         List<Movie> actual = movieRepository.getAllMovies();
@@ -161,13 +159,13 @@ class MovieRepositoryImplTest {
     @Test
     void testGetMovieByTitleWithoutError() throws MovieMalformedException, MovieNotFoundException {
         //Given
-        when(movieDao.findById(any())).thenReturn(Optional.of(MOVIE_ENTITY));
+        when(movieDao.findById(any())).thenReturn(Optional.of(movieEntity));
 
         //When
         Movie actual = movieRepository.getMovieByTitle(MOVIE_TITLE);
 
         //Then
-        assertThat(actual, equalTo(MOVIE));
+        assertThat(actual, equalTo(movie));
     }
 
     @Test
@@ -185,7 +183,7 @@ class MovieRepositoryImplTest {
     @Test
     void testGetMovieByTitleWithMovieMalformedException() {
         //Given
-        when(movieDao.findById(any())).thenReturn(Optional.of(MOVIE_ENTITY_INVALID));
+        when(movieDao.findById(any())).thenReturn(Optional.of(movieEntityInvalid));
 
         //Then
         assertThrows(MovieMalformedException.class, () -> {
@@ -197,16 +195,16 @@ class MovieRepositoryImplTest {
     @Test
     void testUpdateMovieWithoutError() throws MovieNotFoundException {
         //Given
-        when(movieDao.findById(any())).thenReturn(Optional.of(MOVIE_ENTITY));
+        when(movieDao.findById(any())).thenReturn(Optional.of(movieEntity));
 
         //When
-        movieRepository.updateMovie(UPDATE_MOVIE);
+        movieRepository.updateMovie(updateMovie);
 
         //Then
         ArgumentCaptor<MovieEntity> movieEntityArgumentCaptor = ArgumentCaptor.forClass(MovieEntity.class);
         verify(movieDao, times(1)).save(movieEntityArgumentCaptor.capture());
         MovieEntity actual = movieEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(UPDATE_MOVIE_ENTITY));
+        assertThat(actual, equalTo(updateMovieEntity));
     }
 
     @Test
@@ -217,14 +215,14 @@ class MovieRepositoryImplTest {
         //Then
         assertThrows(MovieNotFoundException.class, () -> {
             //When
-            movieRepository.updateMovie(UPDATE_MOVIE);
+            movieRepository.updateMovie(updateMovie);
         });
     }
 
     @Test
     void deleteMovieByTitleWithoutError() throws MovieNotFoundException {
         //Given
-        when(movieDao.findById(any())).thenReturn(Optional.of(MOVIE_ENTITY));
+        when(movieDao.findById(any())).thenReturn(Optional.of(movieEntity));
 
         //When
         movieRepository.deleteMovieByTitle(MOVIE_TITLE);
