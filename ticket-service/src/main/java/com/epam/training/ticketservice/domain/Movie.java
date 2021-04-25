@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.domain;
 
 import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthException;
+import com.epam.training.ticketservice.domain.exception.PriceComponentAlreadyAddedException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -30,6 +31,16 @@ public class Movie {
         this.genre = genre;
         this.length = length;
         this.priceComponentSet = priceComponentSet;
+    }
+
+    public void attachPriceComponent(PriceComponent priceComponent) throws PriceComponentAlreadyAddedException {
+        if (!priceComponentSet.add(priceComponent)) {
+            throw new PriceComponentAlreadyAddedException(
+                    String.format("Price component %s has already been added to movie %s",
+                            priceComponent.getName(),
+                            this.title)
+            );
+        }
     }
 
     private void validateMovieLength(int length) throws InvalidMovieLengthException {
