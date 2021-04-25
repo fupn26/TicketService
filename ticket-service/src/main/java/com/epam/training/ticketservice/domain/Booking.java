@@ -34,7 +34,7 @@ public class Booking {
         int result = basePrice;
         result += sumPriceComponents(screening.getPriceComponentSet());
         result += sumPriceComponents(screening.getMovie().getPriceComponentSet());
-        result += sumPriceComponents(screening.getRoom().getPriceComponentSet());
+        result += sumPriceComponents(screening.getRoom().getPriceComponents());
         return result * seatList.size();
     }
 
