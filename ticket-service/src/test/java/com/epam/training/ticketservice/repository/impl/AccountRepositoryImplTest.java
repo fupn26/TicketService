@@ -5,6 +5,7 @@ import com.epam.training.ticketservice.dao.entity.AccountEntity;
 import com.epam.training.ticketservice.domain.Account;
 import com.epam.training.ticketservice.repository.exception.AccountAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.AccountNotFoundException;
+import com.epam.training.ticketservice.repository.mapper.AccountMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -31,6 +32,8 @@ class AccountRepositoryImplTest {
     private AccountRepositoryImpl accountRepository;
     @Mock
     private AccountDao accountDao;
+    @Mock
+    private AccountMapper accountMapper;
 
     private static final String USERNAME = "james";
     private static final Account ACCOUNT = new Account(USERNAME, "bond", false);
@@ -40,6 +43,7 @@ class AccountRepositoryImplTest {
     void testCreateAccountWithoutError() throws AccountAlreadyExistsException {
         //Given
         when(accountDao.findById(any())).thenReturn(Optional.empty());
+        when(accountMapper.mapToAccountEntity(any())).thenReturn(ACCOUNT_ENTITY);
 
         //When
         accountRepository.createAccount(ACCOUNT);
@@ -47,7 +51,8 @@ class AccountRepositoryImplTest {
         //Then
         ArgumentCaptor<AccountEntity> accountEntityArgumentCaptor = ArgumentCaptor.forClass(AccountEntity.class);
         verify(accountDao, times(1)).save(accountEntityArgumentCaptor.capture());
-        assertThat(ACCOUNT_ENTITY, equalTo(accountEntityArgumentCaptor.getValue()));
+        AccountEntity actual = accountEntityArgumentCaptor.getValue();
+        assertThat(actual, equalTo(ACCOUNT_ENTITY));
     }
 
     @Test
@@ -66,12 +71,13 @@ class AccountRepositoryImplTest {
     void testGetAccountByUserNameWithoutError() throws AccountNotFoundException {
         //Given
         when(accountDao.findById(any())).thenReturn(Optional.of(ACCOUNT_ENTITY));
+        when(accountMapper.mapToAccount(any())).thenReturn(ACCOUNT);
 
         //When
-        Account account = accountRepository.getAccountByUserName(USERNAME);
+        Account actual = accountRepository.getAccountByUserName(USERNAME);
 
         //Then
-        assertThat(ACCOUNT, equalTo(account));
+        assertThat(actual, equalTo(ACCOUNT));
     }
 
     @Test

@@ -7,6 +7,7 @@ import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.repository.PriceComponentRepository;
 import com.epam.training.ticketservice.repository.exception.PriceComponentAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.PriceComponentNotFoundException;
+import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -33,6 +34,8 @@ class PriceComponentRepositoryImplTest {
     private PriceComponentRepositoryImpl priceComponentRepository;
     @Mock
     private PriceComponentDao priceComponentDao;
+    @Mock
+    private PriceComponentMapper priceComponentMapper;
 
     private static final String PRICE_COMPONENT_NAME = "glamour";
     private static final int PRICE_COMPONENT_VALUE = -200;
@@ -46,6 +49,7 @@ class PriceComponentRepositoryImplTest {
     void testCreatePriceComponentWithoutError() throws PriceComponentAlreadyExistsException {
         //Given
         when(priceComponentDao.findById(any())).thenReturn(Optional.empty());
+        when(priceComponentMapper.mapToPriceComponentEntity(any())).thenReturn(PRICE_COMPONENT_ENTITY);
 
         //When
         priceComponentRepository.createPriceComponent(PRICE_COMPONENT);
@@ -74,6 +78,7 @@ class PriceComponentRepositoryImplTest {
     void testGetPriceComponentByNameWithoutError() throws PriceComponentNotFoundException {
         //Given
         when(priceComponentDao.findById(any())).thenReturn(Optional.of(PRICE_COMPONENT_ENTITY));
+        when(priceComponentMapper.mapToPriceComponent(any())).thenReturn(PRICE_COMPONENT);
 
         //When
         PriceComponent actual = priceComponentRepository.getPriceComponentByName(PRICE_COMPONENT_NAME);

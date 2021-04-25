@@ -10,6 +10,8 @@ import com.epam.training.ticketservice.repository.MovieRepository;
 import com.epam.training.ticketservice.repository.exception.MovieAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.MovieMalformedException;
 import com.epam.training.ticketservice.repository.exception.MovieNotFoundException;
+import com.epam.training.ticketservice.repository.mapper.MovieMapper;
+import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,6 +27,8 @@ import java.util.stream.Collectors;
 public class MovieRepositoryImpl implements MovieRepository {
 
     private final MovieDao movieDao;
+    private final MovieMapper movieMapper;
+    private final PriceComponentMapper priceComponentMapper;
 
     @Override
     public void createMovie(Movie movieToCreate) throws MovieAlreadyExistsException {
@@ -32,7 +36,7 @@ public class MovieRepositoryImpl implements MovieRepository {
             throw new MovieAlreadyExistsException(String.format("Movie already exists: %s",
                     movieToCreate.getTitle()));
         }
-        movieDao.save(mapToMovieEntity(movieToCreate));
+        movieDao.save(movieMapper.mapToMovieEntity(movieToCreate));
     }
 
     @Override
@@ -58,7 +62,9 @@ public class MovieRepositoryImpl implements MovieRepository {
         MovieEntity movieEntityToUpdate = getMovieEntityByTitle(movieToUpdate.getTitle());
         movieEntityToUpdate.setGenre(movieToUpdate.getGenre());
         movieEntityToUpdate.setLength(movieToUpdate.getLength());
-        movieEntityToUpdate.setPriceComponents(mapToPriceComponentEntities(movieToUpdate.getPriceComponentSet()));
+        movieEntityToUpdate.setPriceComponents(
+                priceComponentMapper.mapToPriceComponentEntities(movieToUpdate.getPriceComponentSet())
+        );
         movieDao.save(movieEntityToUpdate);
     }
 
@@ -70,46 +76,14 @@ public class MovieRepositoryImpl implements MovieRepository {
         movieDao.deleteById(movieTitle);
     }
 
-    private MovieEntity mapToMovieEntity(Movie movieToMap) {
-        return new MovieEntity(movieToMap.getTitle(),
-                movieToMap.getGenre(),
-                movieToMap.getLength(),
-                mapToPriceComponentEntities(movieToMap.getPriceComponentSet()));
-    }
-
     private Optional<Movie> mapToMovie(MovieEntity movieEntityToMap) {
         Optional<Movie> result = Optional.empty();
         try {
-            result = Optional.of(new Movie(movieEntityToMap.getTitle(),
-                    movieEntityToMap.getGenre(),
-                    movieEntityToMap.getLength(),
-                    mapToPriceComponents(movieEntityToMap.getPriceComponents())));
+            result = Optional.of(movieMapper.mapToMovie(movieEntityToMap));
         } catch (InvalidMovieLengthException e) {
             log.warn(e.getMessage());
         }
         return result;
-    }
-
-    private Set<PriceComponentEntity> mapToPriceComponentEntities(Set<PriceComponent> priceComponents) {
-        return priceComponents.stream()
-                .map(this::mapToPriceComponentEntity)
-                .collect(Collectors.toSet());
-    }
-
-    private PriceComponentEntity mapToPriceComponentEntity(PriceComponent priceComponent) {
-        return new PriceComponentEntity(priceComponent.getName(),
-                priceComponent.getValue());
-    }
-
-    private Set<PriceComponent> mapToPriceComponents(Set<PriceComponentEntity> priceComponentEntities) {
-        return priceComponentEntities.stream()
-                .map(this::mapToPriceComponent)
-                .collect(Collectors.toSet());
-    }
-
-    private PriceComponent mapToPriceComponent(PriceComponentEntity priceComponentEntity) {
-        return new PriceComponent(priceComponentEntity.getName(),
-                priceComponentEntity.getValue());
     }
 
     private boolean isMovieExistsByTitle(String movieTitle) {

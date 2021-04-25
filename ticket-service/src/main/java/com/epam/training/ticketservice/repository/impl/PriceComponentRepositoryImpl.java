@@ -6,6 +6,7 @@ import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.repository.PriceComponentRepository;
 import com.epam.training.ticketservice.repository.exception.PriceComponentAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.PriceComponentNotFoundException;
+import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class PriceComponentRepositoryImpl implements PriceComponentRepository {
 
     private final PriceComponentDao priceComponentDao;
+    private final PriceComponentMapper priceComponentMapper;
 
     @Override
     public void createPriceComponent(PriceComponent priceComponentToCreate)
@@ -25,7 +27,7 @@ public class PriceComponentRepositoryImpl implements PriceComponentRepository {
             throw new PriceComponentAlreadyExistsException(String.format("Price component already exists: %s",
                     priceComponentToCreate.getName()));
         }
-        priceComponentDao.save(mapToPriceComponentEntity(priceComponentToCreate));
+        priceComponentDao.save(priceComponentMapper.mapToPriceComponentEntity(priceComponentToCreate));
     }
 
     @Override
@@ -35,17 +37,7 @@ public class PriceComponentRepositoryImpl implements PriceComponentRepository {
             throw new PriceComponentNotFoundException(String.format("Price component not found: %s",
                     priceComponentName));
         }
-        return mapToPriceComponent(priceComponentEntity.get());
-    }
-
-    private PriceComponentEntity mapToPriceComponentEntity(PriceComponent priceComponentToMap) {
-        return new PriceComponentEntity(priceComponentToMap.getName(),
-                priceComponentToMap.getValue());
-    }
-
-    private PriceComponent mapToPriceComponent(PriceComponentEntity priceComponentEntityToMap) {
-        return new PriceComponent(priceComponentEntityToMap.getName(),
-                priceComponentEntityToMap.getValue());
+        return priceComponentMapper.mapToPriceComponent(priceComponentEntity.get());
     }
 
     private Optional<PriceComponentEntity> getPriceComponentEntity(String priceComponentName) {

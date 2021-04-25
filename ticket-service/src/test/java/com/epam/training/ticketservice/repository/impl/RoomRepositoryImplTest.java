@@ -7,10 +7,13 @@ import com.epam.training.ticketservice.dao.entity.RoomEntity;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.domain.Room;
 import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
+import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.repository.exception.RoomAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.RoomMalformedException;
 import com.epam.training.ticketservice.repository.exception.RoomNotFoundException;
+import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
+import com.epam.training.ticketservice.repository.mapper.RoomMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,6 +43,10 @@ class RoomRepositoryImplTest {
     private RoomRepositoryImpl roomRepository;
     @Mock
     private RoomDao roomDao;
+    @Mock
+    private RoomMapper roomMapper;
+    @Mock
+    private PriceComponentMapper priceComponentMapper;
 
     private static final String ROOM_NAME = "best room";
     private static final int ROWS = 10;
@@ -104,6 +111,7 @@ class RoomRepositoryImplTest {
     void testCreateRoomWithoutError() throws RoomAlreadyExistsException {
         //Given
         when(roomDao.findById(any())).thenReturn(Optional.empty());
+        when(roomMapper.mapToRoomEntity(any())).thenReturn(roomEntity);
 
         //When
         roomRepository.createRoom(room);
@@ -128,9 +136,10 @@ class RoomRepositoryImplTest {
     }
 
     @Test
-    void testGetAllRoomsWithoutError() {
+    void testGetAllRoomsWithoutError() throws InvalidColumnException, InvalidRowException {
         //Given
         when(roomDao.findAll()).thenReturn(roomEntities);
+        when(roomMapper.mapToRoom(any())).thenReturn(room);
 
         //When
         List<Room> actual = roomRepository.getAllRooms();
@@ -140,9 +149,10 @@ class RoomRepositoryImplTest {
     }
 
     @Test
-    void testGetAllRoomWithRoomMapProblem() {
+    void testGetAllRoomWithInvalidColumnException() throws InvalidColumnException, InvalidRowException {
         //Given
         when(roomDao.findAll()).thenReturn(invalidRoomEntities);
+        when(roomMapper.mapToRoom(any())).thenThrow(new InvalidColumnException(""));
 
         //When
         List<Room> actual = roomRepository.getAllRooms();
@@ -152,9 +162,24 @@ class RoomRepositoryImplTest {
     }
 
     @Test
-    void testGetRoomByNameWithoutError() throws RoomNotFoundException, RoomMalformedException {
+    void testGetAllRoomWithInvalidRowException() throws InvalidColumnException, InvalidRowException {
+        //Given
+        when(roomDao.findAll()).thenReturn(invalidRoomEntities);
+        when(roomMapper.mapToRoom(any())).thenThrow(new InvalidRowException(""));
+
+        //When
+        List<Room> actual = roomRepository.getAllRooms();
+
+        //Then
+        assertThat(actual, equalTo(List.of()));
+    }
+
+    @Test
+    void testGetRoomByNameWithoutError() throws RoomNotFoundException, RoomMalformedException,
+            InvalidColumnException, InvalidRowException {
         //Given
         when(roomDao.findById(any())).thenReturn(Optional.of(roomEntity));
+        when(roomMapper.mapToRoom(any())).thenReturn(room);
 
         //When
         Room actual = roomRepository.getRoomByName(ROOM_NAME);
@@ -176,9 +201,24 @@ class RoomRepositoryImplTest {
     }
 
     @Test
-    void testGetRoomByNameWithRoomMalformedException() {
+    void testGetRoomByNameWithInvalidColumnExceptionThrowsRoomMalformedException() throws InvalidColumnException, InvalidRowException {
         //Given
         when(roomDao.findById(any())).thenReturn(Optional.of(invalidRoomEntity));
+        when(roomMapper.mapToRoom(any())).thenThrow(new InvalidColumnException(""));
+
+        //Then
+        assertThrows(RoomMalformedException.class, () -> {
+            //When
+            roomRepository.getRoomByName(ROOM_NAME);
+        });
+    }
+
+    @Test
+    void testGetRoomByNameWithInvalidRowExceptionThrowsRoomMalformedException() throws InvalidColumnException,
+            InvalidRowException {
+        //Given
+        when(roomDao.findById(any())).thenReturn(Optional.of(invalidRoomEntity));
+        when(roomMapper.mapToRoom(any())).thenThrow(new InvalidRowException(""));
 
         //Then
         assertThrows(RoomMalformedException.class, () -> {
@@ -191,6 +231,7 @@ class RoomRepositoryImplTest {
     void testUpdateRoomWithoutError() throws RoomNotFoundException {
         //Given
         when(roomDao.findById(any())).thenReturn(Optional.of(roomEntity));
+        when(priceComponentMapper.mapToPriceComponentEntities(any())).thenReturn(UPDATE_PRICE_COMPONENT_ENTITIES);
 
         //When
         roomRepository.updateRoom(updateRoom);

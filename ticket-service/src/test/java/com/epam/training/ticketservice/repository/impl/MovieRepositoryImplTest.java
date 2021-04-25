@@ -9,6 +9,8 @@ import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthExcept
 import com.epam.training.ticketservice.repository.exception.MovieAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.MovieMalformedException;
 import com.epam.training.ticketservice.repository.exception.MovieNotFoundException;
+import com.epam.training.ticketservice.repository.mapper.MovieMapper;
+import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -39,6 +41,10 @@ class MovieRepositoryImplTest {
     private MovieRepositoryImpl movieRepository;
     @Mock
     private MovieDao movieDao;
+    @Mock
+    private MovieMapper movieMapper;
+    @Mock
+    private PriceComponentMapper priceComponentMapper;
 
     private static final String MOVIE_TITLE = "best movie";
     private static final String MOVIE_GENRE = "drama";
@@ -109,6 +115,7 @@ class MovieRepositoryImplTest {
     void testCreateMovieWithoutError() throws MovieAlreadyExistsException {
         //Given
         when(movieDao.findById(any())).thenReturn(Optional.empty());
+        when(movieMapper.mapToMovieEntity(any())).thenReturn(movieEntity);
 
         //When
         movieRepository.createMovie(movie);
@@ -133,9 +140,10 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    void testGetAllMoviesWithoutError() {
+    void testGetAllMoviesWithoutError() throws InvalidMovieLengthException {
         //Given
         when(movieDao.findAll()).thenReturn(movieEntities);
+        when(movieMapper.mapToMovie(any())).thenReturn(movie);
 
         //When
         List<Movie> actual = movieRepository.getAllMovies();
@@ -145,9 +153,11 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    void testGetAllMoviesWithMappingProblems() {
+    void testGetAllMoviesWithInvalidMovieLengthException() throws InvalidMovieLengthException {
         //Given
         when(movieDao.findAll()).thenReturn(movieEntitiesInvalid);
+        when(movieMapper.mapToMovie(any())).thenThrow(new InvalidMovieLengthException(""));
+
 
         //When
         List<Movie> actual = movieRepository.getAllMovies();
@@ -157,9 +167,13 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    void testGetMovieByTitleWithoutError() throws MovieMalformedException, MovieNotFoundException {
+    void testGetMovieByTitleWithoutError() throws MovieMalformedException,
+            MovieNotFoundException,
+            InvalidMovieLengthException {
         //Given
         when(movieDao.findById(any())).thenReturn(Optional.of(movieEntity));
+        when(movieMapper.mapToMovie(any())).thenReturn(movie);
+
 
         //When
         Movie actual = movieRepository.getMovieByTitle(MOVIE_TITLE);
@@ -181,9 +195,10 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    void testGetMovieByTitleWithMovieMalformedException() {
+    void testGetMovieByTitleWithMovieMalformedException() throws InvalidMovieLengthException {
         //Given
         when(movieDao.findById(any())).thenReturn(Optional.of(movieEntityInvalid));
+        when(movieMapper.mapToMovie(any())).thenThrow(new InvalidMovieLengthException(""));
 
         //Then
         assertThrows(MovieMalformedException.class, () -> {
@@ -196,6 +211,8 @@ class MovieRepositoryImplTest {
     void testUpdateMovieWithoutError() throws MovieNotFoundException {
         //Given
         when(movieDao.findById(any())).thenReturn(Optional.of(movieEntity));
+        when(priceComponentMapper.mapToPriceComponentEntities(any()))
+                .thenReturn(UPDATE_PRICE_COMPONENT_ENTITIES);
 
         //When
         movieRepository.updateMovie(updateMovie);
