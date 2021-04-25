@@ -2,7 +2,7 @@ package com.epam.training.ticketservice.domain;
 
 import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
-import lombok.AllArgsConstructor;
+import com.epam.training.ticketservice.domain.exception.PriceComponentAlreadyAttachedException;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
@@ -15,7 +15,7 @@ public class Room {
     private final String name;
     private final int rows;
     private final int columns;
-    private final Set<PriceComponent> priceComponentSet;
+    private final Set<PriceComponent> priceComponents;
 
     public Room(String name, int rows, int columns) throws InvalidRowException, InvalidColumnException {
         validateRowNumber(rows);
@@ -24,10 +24,10 @@ public class Room {
         this.name = name;
         this.rows = rows;
         this.columns = columns;
-        this.priceComponentSet = new HashSet<>();
+        this.priceComponents = new HashSet<>();
     }
 
-    public Room(String name, int rows, int columns, Set<PriceComponent> priceComponentSet)
+    public Room(String name, int rows, int columns, Set<PriceComponent> priceComponents)
             throws InvalidRowException, InvalidColumnException {
         validateRowNumber(rows);
         validateColumnNumber(columns);
@@ -35,17 +35,28 @@ public class Room {
         this.name = name;
         this.rows = rows;
         this.columns = columns;
-        this.priceComponentSet = priceComponentSet;
+        this.priceComponents = priceComponents;
+    }
+
+    public void attachPriceComponent(PriceComponent priceComponentToAttach)
+            throws PriceComponentAlreadyAttachedException {
+        if (!priceComponents.add(priceComponentToAttach)) {
+            throw new PriceComponentAlreadyAttachedException(
+                    String.format("Price component %s has already been attached to room %s",
+                    priceComponentToAttach.getName(),
+                    name)
+            );
+        }
     }
 
     private void validateRowNumber(int rowNum) throws InvalidRowException {
-        if (rowNum < 0) {
+        if (rowNum < 1) {
             throw new InvalidRowException("Number of rows is not valid");
         }
     }
 
     private void validateColumnNumber(int columnNum) throws InvalidColumnException {
-        if (columnNum < 0) {
+        if (columnNum < 1) {
             throw new InvalidColumnException("Number of columns is not valid");
         }
     }
