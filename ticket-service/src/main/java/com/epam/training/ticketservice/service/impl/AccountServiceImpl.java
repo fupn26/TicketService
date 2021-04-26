@@ -10,7 +10,6 @@ import com.epam.training.ticketservice.service.exception.SignInFailedException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -25,7 +24,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void signOutAccount() {
+    public void signInAccount(String username, String password) throws SignInFailedException {
+
+    }
+
+    @Override
+    public void signOutAccount() throws NoSignedInAccountException {
 
     }
 
