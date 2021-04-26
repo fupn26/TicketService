@@ -21,7 +21,7 @@ public interface ScreeningRepository {
                                                  String roomName,
                                                  LocalDateTime screeningTime) throws ScreeningNotFoundException;
 
-    void deleteScreeningsByMovieName(String movieTitle);
+    void deleteAllScreeningsByMovieName(String movieTitle);
 
-    void deleteScreeningsByRoomName(String roomName);
+    void deleteAllScreeningsByRoomName(String roomName);
 }

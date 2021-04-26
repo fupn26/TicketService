@@ -10,9 +10,6 @@ import com.epam.training.ticketservice.repository.ScreeningRepository;
 import com.epam.training.ticketservice.repository.exception.ScreeningAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.ScreeningMalformedException;
 import com.epam.training.ticketservice.repository.exception.ScreeningNotFoundException;
-import com.epam.training.ticketservice.repository.mapper.MovieMapper;
-import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
-import com.epam.training.ticketservice.repository.mapper.RoomMapper;
 import com.epam.training.ticketservice.repository.mapper.ScreeningMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +28,6 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
 
     private final ScreeningDao screeningDao;
     private final ScreeningMapper screeningMapper;
-    private final MovieMapper movieMapper;
-    private final RoomMapper roomMapper;
-    private final PriceComponentMapper priceComponentMapper;
     private final String SCREENING_NOT_FOUND = "Screening not found: <%s> <%s> <%s>";
     private final String SCREENING_ALREADY_EXISTS = "Screening already exists: %s";
 
@@ -44,7 +38,7 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
                 screeningToCreate.getRoom().getName(),
                 screeningToCreate.getStartDate()
         )) {
-            throw new ScreeningAlreadyExistsException(String.format("Screening already exists: %s",
+            throw new ScreeningAlreadyExistsException(String.format(SCREENING_ALREADY_EXISTS,
                     screeningToCreate));
         }
         screeningDao.save(screeningMapper.mapToScreeningEntity(screeningToCreate));
@@ -89,12 +83,12 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
     }
 
     @Override
-    public void deleteScreeningsByMovieName(String movieTitle) {
+    public void deleteAllScreeningsByMovieName(String movieTitle) {
         screeningDao.deleteAllByMovie_Title(movieTitle);
     }
 
     @Override
-    public void deleteScreeningsByRoomName(String roomName) {
+    public void deleteAllScreeningsByRoomName(String roomName) {
         screeningDao.deleteAllByRoom_Name(roomName);
 
     }
@@ -110,7 +104,7 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
     private Optional<Screening> mapToScreening(ScreeningEntity screeningEntityToMap) {
         Optional<Screening> result = Optional.empty();
         try {
-             result = Optional.of(screeningMapper.mapToScreening(screeningEntityToMap));
+            result = Optional.of(screeningMapper.mapToScreening(screeningEntityToMap));
         } catch (InvalidMovieLengthException | InvalidColumnException | InvalidRowException e) {
             log.warn(e.getMessage());
         }
