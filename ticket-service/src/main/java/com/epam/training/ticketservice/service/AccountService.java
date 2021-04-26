@@ -17,7 +17,7 @@ public interface AccountService {
 
     void signInAccount(String username, String password) throws SignInFailedException;
 
-    void signOutAccount();
+    void signOutAccount() throws NoSignedInAccountException;
 
     Account getSignedInAccount() throws NoSignedInAccountException;
 

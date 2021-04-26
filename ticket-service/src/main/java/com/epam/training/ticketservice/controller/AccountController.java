@@ -62,8 +62,14 @@ public class AccountController {
     }
 
     @ShellMethod(value = "Signs out the user", key = "sign out")
-    public void signOut() {
-        accountService.signOutAccount();
+    public String signOut() {
+        String result = null;
+        try {
+            accountService.signOutAccount();
+        } catch (NoSignedInAccountException e) {
+            result = noSignedInAccount;
+        }
+        return result;
     }
 
 

@@ -29,7 +29,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void signOutAccount() {
+    public void signOutAccount() throws NoSignedInAccountException {
 
     }
 

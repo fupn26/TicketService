@@ -42,7 +42,7 @@ class AccountControllerTest {
     private final static String SIGN_IN_FAIL = "Login failed due to incorrect credentials";
     private final static String SIGN_UP_FAIL = String.format("Account with username '%s' already exists",
             USERNAME);
-    private static final String NO_SIGNED_IN_USER = "You are not signed in";
+    private static final String NO_SIGNED_IN_ACCOUNT = "You are not signed in";
     private static final String MOVIE_TITLE = "best movie";
     private static final String MOVIE_GENRE = "drama";
     private static final int MOVIE_LENGTH = 100;
@@ -179,12 +179,27 @@ class AccountControllerTest {
     }
 
     @Test
-    void testSignOutWithoutError() {
+    void testSignOutWithoutError() throws NoSignedInAccountException {
         //When
-        accountController.signOut();
+        String actual = accountController.signOut();
 
         //Then
         verify(accountService, times(1)).signOutAccount();
+        assertThat(actual, equalTo(SUCCESS));
+    }
+
+    @Test
+    void testSignOutWithNoSignedInAccountException() throws NoSignedInAccountException {
+        doThrow(NoSignedInAccountException.class)
+                .when(accountService)
+                .signOutAccount();
+
+        //When
+        String actual = accountController.signOut();
+
+        //Then
+        verify(accountService, times(1)).signOutAccount();
+        assertThat(actual, equalTo(NO_SIGNED_IN_ACCOUNT));
     }
 
 
@@ -197,7 +212,7 @@ class AccountControllerTest {
         String actual = accountController.describeAccount();
 
         //Then
-        assertThat(actual, equalTo(NO_SIGNED_IN_USER));
+        assertThat(actual, equalTo(NO_SIGNED_IN_ACCOUNT));
     }
 
     @Test
