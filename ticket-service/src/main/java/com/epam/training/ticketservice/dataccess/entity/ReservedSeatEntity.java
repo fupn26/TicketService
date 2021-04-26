@@ -1,6 +1,6 @@
-package com.epam.training.ticketservice.dao.entity;
+package com.epam.training.ticketservice.dataccess.entity;
 
-import com.epam.training.ticketservice.dao.entity.id.ScreeningPriceComponentId;
+import com.epam.training.ticketservice.dataccess.entity.id.ReservedSeatId;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +12,8 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
-public class ScreeningPriceComponentEntity {
+public class ReservedSeatEntity {
 
     @EmbeddedId
-    private ScreeningPriceComponentId id;
+    private ReservedSeatId id;
 }

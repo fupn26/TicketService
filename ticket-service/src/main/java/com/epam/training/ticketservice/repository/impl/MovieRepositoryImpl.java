@@ -1,10 +1,8 @@
 package com.epam.training.ticketservice.repository.impl;
 
-import com.epam.training.ticketservice.dao.MovieDao;
-import com.epam.training.ticketservice.dao.entity.MovieEntity;
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.MovieDao;
+import com.epam.training.ticketservice.dataccess.entity.MovieEntity;
 import com.epam.training.ticketservice.domain.Movie;
-import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthException;
 import com.epam.training.ticketservice.repository.MovieRepository;
 import com.epam.training.ticketservice.repository.exception.MovieAlreadyExistsException;
@@ -18,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j

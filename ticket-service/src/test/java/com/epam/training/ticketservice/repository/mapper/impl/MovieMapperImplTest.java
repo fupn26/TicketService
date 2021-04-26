@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.repository.mapper.impl;
 
-import com.epam.training.ticketservice.dao.entity.MovieEntity;
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.entity.MovieEntity;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
 import com.epam.training.ticketservice.domain.Movie;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthException;

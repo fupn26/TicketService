@@ -8,7 +8,6 @@ import com.epam.training.ticketservice.service.exception.PrivilegedAccountExcept
 import com.epam.training.ticketservice.service.exception.SignInFailedException;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface AccountService {
     void signUpAccount(String username, String password) throws AccountAlreadyExistsException;

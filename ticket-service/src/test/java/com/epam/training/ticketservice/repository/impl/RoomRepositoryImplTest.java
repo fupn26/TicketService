@@ -1,13 +1,11 @@
 package com.epam.training.ticketservice.repository.impl;
 
-import com.epam.training.ticketservice.dao.RoomDao;
-import com.epam.training.ticketservice.dao.entity.MovieEntity;
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
-import com.epam.training.ticketservice.dao.entity.RoomEntity;
+import com.epam.training.ticketservice.dataccess.RoomDao;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.entity.RoomEntity;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.domain.Room;
 import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
-import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.repository.exception.RoomAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.RoomMalformedException;

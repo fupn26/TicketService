@@ -1,7 +1,7 @@
-package com.epam.training.ticketservice.dao.entity.id;
+package com.epam.training.ticketservice.dataccess.entity.id;
 
-import com.epam.training.ticketservice.dao.entity.MovieEntity;
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.entity.MovieEntity;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

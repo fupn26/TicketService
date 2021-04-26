@@ -1,10 +1,10 @@
 package com.epam.training.ticketservice.repository.impl;
 
-import com.epam.training.ticketservice.dao.ScreeningDao;
-import com.epam.training.ticketservice.dao.entity.MovieEntity;
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
-import com.epam.training.ticketservice.dao.entity.RoomEntity;
-import com.epam.training.ticketservice.dao.entity.ScreeningEntity;
+import com.epam.training.ticketservice.dataccess.ScreeningDao;
+import com.epam.training.ticketservice.dataccess.entity.MovieEntity;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.entity.RoomEntity;
+import com.epam.training.ticketservice.dataccess.entity.ScreeningEntity;
 import com.epam.training.ticketservice.domain.Movie;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.domain.Room;

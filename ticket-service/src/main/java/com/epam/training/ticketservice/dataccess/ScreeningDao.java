@@ -1,6 +1,6 @@
-package com.epam.training.ticketservice.dao;
+package com.epam.training.ticketservice.dataccess;
 
-import com.epam.training.ticketservice.dao.entity.ScreeningEntity;
+import com.epam.training.ticketservice.dataccess.entity.ScreeningEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDateTime;
