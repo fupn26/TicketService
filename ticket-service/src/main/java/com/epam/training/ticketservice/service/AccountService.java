@@ -15,6 +15,8 @@ public interface AccountService {
 
     void signInAccountPrivileged(String username, String password) throws SignInFailedException;
 
+    void signInAccount(String username, String password) throws SignInFailedException;
+
     void signOutAccount();
 
     Account getSignedInAccount() throws NoSignedInAccountException;

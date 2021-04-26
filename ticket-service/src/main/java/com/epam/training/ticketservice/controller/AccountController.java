@@ -50,6 +50,17 @@ public class AccountController {
         return result;
     }
 
+    @ShellMethod(value = "Signs in the user", key = "sign in")
+    public String signIn(String username, String password) {
+        String result = null;
+        try {
+            accountService.signInAccount(username, password);
+        } catch (SignInFailedException e) {
+            result = loginFail;
+        }
+        return result;
+    }
+
     @ShellMethod(value = "Signs out the user", key = "sign out")
     public void signOut() {
         accountService.signOutAccount();

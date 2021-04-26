@@ -275,4 +275,38 @@ class AccountControllerTest {
         assertThat(passwordCaptor.getValue(), equalTo(PASSWORD));
         assertThat(actual, equalTo(SIGN_UP_FAIL));
     }
+
+    @Test
+    void testSignInWithoutError() throws SignInFailedException {
+        //When
+        String actual = accountController.signIn(USERNAME, PASSWORD);
+
+        //Then
+        ArgumentCaptor<String> usernameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
+        verify(accountService, times(1)).signInAccount(usernameCaptor.capture(),
+                passwordCaptor.capture());
+        assertThat(usernameCaptor.getValue(), equalTo(USERNAME));
+        assertThat(passwordCaptor.getValue(), equalTo(PASSWORD));
+        assertThat(actual, equalTo(SUCCESS));
+    }
+
+    @Test
+    void testSignInWithSignInFailedException() throws SignInFailedException {
+        //When
+        doThrow(SignInFailedException.class)
+                .when(accountService)
+                .signInAccount(any(), any());
+        String actual = accountController.signIn(USERNAME, PASSWORD);
+
+        //Then
+        ArgumentCaptor<String> usernameCaptor = ArgumentCaptor.forClass(String.class);
+        ArgumentCaptor<String> passwordCaptor = ArgumentCaptor.forClass(String.class);
+        verify(accountService, times(1)).signInAccount(usernameCaptor.capture(),
+                passwordCaptor.capture());
+        assertThat(usernameCaptor.getValue(), equalTo(USERNAME));
+        assertThat(passwordCaptor.getValue(), equalTo(PASSWORD));
+        assertThat(actual, equalTo(SIGN_IN_FAIL));
+    }
+
 }
