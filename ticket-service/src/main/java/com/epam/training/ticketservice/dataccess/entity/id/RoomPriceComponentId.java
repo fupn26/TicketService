@@ -1,7 +1,7 @@
-package com.epam.training.ticketservice.dao.entity.id;
+package com.epam.training.ticketservice.dataccess.entity.id;
 
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
-import com.epam.training.ticketservice.dao.entity.ScreeningEntity;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.entity.RoomEntity;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -13,15 +13,15 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 
 @Embeddable
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @EqualsAndHashCode
-public class ScreeningPriceComponentId implements Serializable {
+public class RoomPriceComponentId implements Serializable {
 
     @ManyToOne
-    @JoinColumn(name = "screening_id")
-    private ScreeningEntity screening;
+    @JoinColumn(name = "room_id")
+    private RoomEntity room;
     @ManyToOne
     @JoinColumn(name = "price_component_id")
     private PriceComponentEntity priceComponent;

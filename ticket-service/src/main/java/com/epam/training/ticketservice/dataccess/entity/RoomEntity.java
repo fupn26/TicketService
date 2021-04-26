@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.dao.entity;
+package com.epam.training.ticketservice.dataccess.entity;
 
 import lombok.*;
 

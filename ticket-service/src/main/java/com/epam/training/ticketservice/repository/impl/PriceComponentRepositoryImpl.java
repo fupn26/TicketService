@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.repository.impl;
 
-import com.epam.training.ticketservice.dao.PriceComponentDao;
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.PriceComponentDao;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.repository.PriceComponentRepository;
 import com.epam.training.ticketservice.repository.exception.PriceComponentAlreadyExistsException;
