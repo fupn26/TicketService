@@ -15,7 +15,6 @@ import com.epam.training.ticketservice.repository.mapper.RoomMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -27,7 +26,7 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -115,10 +114,7 @@ class RoomRepositoryImplTest {
         roomRepository.createRoom(room);
 
         //Then
-        ArgumentCaptor<RoomEntity> roomEntityArgumentCaptor = ArgumentCaptor.forClass(RoomEntity.class);
-        verify(roomDao, times(1)).save(roomEntityArgumentCaptor.capture());
-        RoomEntity actual = roomEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(roomEntity));
+        verify(roomDao, times(1)).save(roomEntity);
     }
 
     @Test
@@ -235,10 +231,7 @@ class RoomRepositoryImplTest {
         roomRepository.updateRoom(updateRoom);
 
         //Then
-        ArgumentCaptor<RoomEntity> roomEntityArgumentCaptor = ArgumentCaptor.forClass(RoomEntity.class);
-        verify(roomDao, times(1)).save(roomEntityArgumentCaptor.capture());
-        RoomEntity actual = roomEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(updateRoomEntity));
+        verify(roomDao, times(1)).save(updateRoomEntity);
     }
 
 
@@ -263,10 +256,7 @@ class RoomRepositoryImplTest {
         roomRepository.deleteRoomByName(ROOM_NAME);
 
         //Then
-        ArgumentCaptor<String> roomEntityArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(roomDao, times(1)).deleteById(roomEntityArgumentCaptor.capture());
-        String actual = roomEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(ROOM_NAME));
+        verify(roomDao, times(1)).deleteById(ROOM_NAME);
     }
 
     @Test

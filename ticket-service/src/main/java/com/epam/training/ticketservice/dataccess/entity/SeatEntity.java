@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.dataccess.entity;
 
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ import java.util.UUID;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"room_id", "row_num", "column_num"})})
 @NoArgsConstructor
 @Getter
+@EqualsAndHashCode
 public class SeatEntity {
 
     @Id

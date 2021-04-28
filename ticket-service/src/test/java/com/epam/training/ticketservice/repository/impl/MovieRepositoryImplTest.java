@@ -14,7 +14,6 @@ import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -26,7 +25,6 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
@@ -121,10 +119,7 @@ class MovieRepositoryImplTest {
         movieRepository.createMovie(movie);
 
         //Then
-        ArgumentCaptor<MovieEntity> movieEntityArgumentCaptor = ArgumentCaptor.forClass(MovieEntity.class);
-        verify(movieDao, times(1)).save(movieEntityArgumentCaptor.capture());
-        MovieEntity actual = movieEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(movieEntity));
+        verify(movieDao, times(1)).save(movieEntity);
     }
 
     @Test
@@ -218,10 +213,7 @@ class MovieRepositoryImplTest {
         movieRepository.updateMovie(updateMovie);
 
         //Then
-        ArgumentCaptor<MovieEntity> movieEntityArgumentCaptor = ArgumentCaptor.forClass(MovieEntity.class);
-        verify(movieDao, times(1)).save(movieEntityArgumentCaptor.capture());
-        MovieEntity actual = movieEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(updateMovieEntity));
+        verify(movieDao, times(1)).save(updateMovieEntity);
     }
 
     @Test
@@ -245,10 +237,7 @@ class MovieRepositoryImplTest {
         movieRepository.deleteMovieByTitle(MOVIE_TITLE);
 
         //Then
-        ArgumentCaptor<String> movieEntityArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(movieDao, times(1)).deleteById(movieEntityArgumentCaptor.capture());
-        String actual = movieEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(MOVIE_TITLE));
+        verify(movieDao, times(1)).deleteById(MOVIE_TITLE);
     }
 
     @Test
