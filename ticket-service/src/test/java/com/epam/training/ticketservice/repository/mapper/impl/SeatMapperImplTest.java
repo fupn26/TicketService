@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.repository.mapper.impl;
 
-import com.epam.training.ticketservice.dao.entity.RoomEntity;
-import com.epam.training.ticketservice.dao.entity.SeatEntity;
+import com.epam.training.ticketservice.dataccess.entity.RoomEntity;
+import com.epam.training.ticketservice.dataccess.entity.SeatEntity;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.domain.Room;
 import com.epam.training.ticketservice.domain.Seat;

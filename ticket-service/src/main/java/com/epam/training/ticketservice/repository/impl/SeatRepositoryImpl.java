@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.repository.impl;
 
-import com.epam.training.ticketservice.dao.SeatDao;
-import com.epam.training.ticketservice.dao.entity.SeatEntity;
+import com.epam.training.ticketservice.dataccess.SeatDao;
+import com.epam.training.ticketservice.dataccess.entity.SeatEntity;
 import com.epam.training.ticketservice.domain.Seat;
 import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;

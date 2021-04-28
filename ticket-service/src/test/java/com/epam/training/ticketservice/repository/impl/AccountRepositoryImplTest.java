@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.repository.impl;
 
-import com.epam.training.ticketservice.dao.AccountDao;
-import com.epam.training.ticketservice.dao.entity.AccountEntity;
+import com.epam.training.ticketservice.dataccess.AccountDao;
+import com.epam.training.ticketservice.dataccess.entity.AccountEntity;
 import com.epam.training.ticketservice.domain.Account;
 import com.epam.training.ticketservice.repository.exception.AccountAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.AccountNotFoundException;

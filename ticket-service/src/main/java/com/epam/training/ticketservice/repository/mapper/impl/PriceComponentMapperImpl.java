@@ -1,6 +1,6 @@
 package com.epam.training.ticketservice.repository.mapper.impl;
 
-import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
+import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
 import com.epam.training.ticketservice.domain.PriceComponent;
 import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import org.springframework.stereotype.Component;
