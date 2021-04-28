@@ -3,10 +3,10 @@ package com.epam.training.ticketservice.service.impl;
 import com.epam.training.ticketservice.domain.Account;
 import com.epam.training.ticketservice.domain.Booking;
 import com.epam.training.ticketservice.repository.AccountRepository;
-import com.epam.training.ticketservice.repository.BookingRepository;
 import com.epam.training.ticketservice.repository.exception.AccountAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.AccountNotFoundException;
 import com.epam.training.ticketservice.service.AccountService;
+import com.epam.training.ticketservice.service.BookingService;
 import com.epam.training.ticketservice.service.exception.InvalidPasswordException;
 import com.epam.training.ticketservice.service.exception.NoSignedInAccountException;
 import com.epam.training.ticketservice.service.exception.PrivilegedAccountException;
@@ -19,16 +19,16 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final BookingRepository bookingRepository;
+    private final BookingService bookingService;
     private final String noSignedInUserMessage = "No signed in account";
     private final String incorrectPasswordMessage = "The given password is incorrect";
     private final String notPrivilegedMessage = "Account with username %s is not privileged";
     private final String privilegedMessage = "Account with username %s is privileged";
     private Account currentAccount;
 
-    public AccountServiceImpl(AccountRepository accountRepository, BookingRepository bookingRepository) {
+    public AccountServiceImpl(AccountRepository accountRepository, BookingService bookingService) {
         this.accountRepository = accountRepository;
-        this.bookingRepository = bookingRepository;
+        this.bookingService = bookingService;
         currentAccount = null;
     }
 
@@ -105,6 +105,6 @@ public class AccountServiceImpl implements AccountService {
         if (currentAccount.isPrivileged()) {
             throw new PrivilegedAccountException(String.format(privilegedMessage, currentAccount.getUsername()));
         }
-        return bookingRepository.getBookingsByUserName(currentAccount.getUsername());
+        return bookingService.getBookingsByUserName(currentAccount.getUsername());
     }
 }

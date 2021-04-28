@@ -3,16 +3,17 @@ package com.epam.training.ticketservice.domain;
 import com.epam.training.ticketservice.domain.exception.InvalidSeatException;
 import lombok.Getter;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
 public class Booking {
     private final Screening screening;
     private final Account account;
-    private final Set<Seat> seatList;
+    private final LinkedHashSet<Seat> seatList;
     private final int price;
 
-    public Booking(Screening screening, Account account, Set<Seat> seatList, int basePrice)
+    public Booking(Screening screening, Account account, LinkedHashSet<Seat> seatList, int basePrice)
             throws InvalidSeatException {
         validateSeats(screening, seatList);
 

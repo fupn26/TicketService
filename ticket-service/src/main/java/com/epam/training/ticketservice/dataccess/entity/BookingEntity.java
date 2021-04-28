@@ -8,7 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -24,11 +24,11 @@ public class BookingEntity {
     @ManyToOne
     private AccountEntity account;
     @OneToMany
-    private LinkedHashSet<ReservedSeatEntity> seats;
+    private List<ReservedSeatEntity> seats;
     private int price;
 
     public BookingEntity(ScreeningEntity screeningEntity, AccountEntity accountEntity,
-                         LinkedHashSet<ReservedSeatEntity> reservedSeatEntities, int price) {
+                         List<ReservedSeatEntity> reservedSeatEntities, int price) {
         this.screening = screeningEntity;
         this.account = accountEntity;
         this.seats = reservedSeatEntities;

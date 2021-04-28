@@ -6,9 +6,9 @@ import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthExcept
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.domain.exception.InvalidSeatException;
 import com.epam.training.ticketservice.repository.AccountRepository;
-import com.epam.training.ticketservice.repository.BookingRepository;
 import com.epam.training.ticketservice.repository.exception.AccountAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.AccountNotFoundException;
+import com.epam.training.ticketservice.service.BookingService;
 import com.epam.training.ticketservice.service.exception.NoSignedInAccountException;
 import com.epam.training.ticketservice.service.exception.PrivilegedAccountException;
 import com.epam.training.ticketservice.service.exception.SignInFailedException;
@@ -37,7 +37,7 @@ class AccountServiceImplTest {
     @Mock
     private AccountRepository accountRepository;
     @Mock
-    private BookingRepository bookingRepository;
+    private BookingService bookingService;
 
     private static final String USERNAME = "james";
     private static final String PASSWORD = "bond";
@@ -102,10 +102,7 @@ class AccountServiceImplTest {
     private static final LinkedHashSet<Seat> SEATS = createSeatSet(List.of(SEAT_1, SEAT_2));
 
     private static LinkedHashSet<Seat> createSeatSet(List<Seat> seatList) {
-        LinkedHashSet<Seat> seatSet = new LinkedHashSet<>();
-        seatSet.add(SEAT_1);
-        seatSet.add(SEAT_2);
-        return seatSet;
+        return new LinkedHashSet<>(seatList);
     }
 
     private static final Booking BOOKING = createBooking(SCREENING, ACCOUNT, SEATS, BASE_PRICE);
@@ -273,9 +270,7 @@ class AccountServiceImplTest {
         accountService.signOutAccount();
 
         //Then
-        assertThrows(NoSignedInAccountException.class, () -> {
-            accountService.getSignedInAccount();
-        });
+        assertThrows(NoSignedInAccountException.class, () -> accountService.getSignedInAccount());
     }
 
     @Test
@@ -306,7 +301,7 @@ class AccountServiceImplTest {
         //Then
         assertThrows(NoSignedInAccountException.class, () -> {
             //When
-            Account actual = accountService.getSignedInAccount();
+            accountService.getSignedInAccount();
         });
     }
 
@@ -315,7 +310,7 @@ class AccountServiceImplTest {
             throws PrivilegedAccountException, NoSignedInAccountException,
             AccountNotFoundException, SignInFailedException {
         //Given
-        when(bookingRepository.getBookingsByUserName(USERNAME)).thenReturn(BOOKINGS);
+        when(bookingService.getBookingsByUserName(USERNAME)).thenReturn(BOOKINGS);
         when(accountRepository.getAccountByUserName(any())).thenReturn(ACCOUNT);
         accountService.signInAccount(USERNAME, PASSWORD);
 
@@ -341,8 +336,7 @@ class AccountServiceImplTest {
     }
 
     @Test
-    void testGetBookingsOfSignedInAccountWithoutAlreadySignedInNonPrivilegedAccountThrowNoSignedInAccountException()
-            throws AccountNotFoundException, SignInFailedException {
+    void testGetBookingsOfSignedInAccountWithoutAlreadySignedInNonPrivilegedAccountThrowNoSignedInAccountException() {
         //Then
         assertThrows(NoSignedInAccountException.class, () -> {
             //When

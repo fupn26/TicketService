@@ -11,6 +11,6 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<Booking> getBookingsByUserName(String username) {
-        return null;
+        return List.of();
     }
 }
