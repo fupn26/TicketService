@@ -8,11 +8,12 @@ import com.epam.training.ticketservice.repository.exception.PriceComponentAlread
 import com.epam.training.ticketservice.repository.exception.PriceComponentNotFoundException;
 import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
-@Service
+@Repository
 @RequiredArgsConstructor
 public class PriceComponentRepositoryImpl implements PriceComponentRepository {
 
