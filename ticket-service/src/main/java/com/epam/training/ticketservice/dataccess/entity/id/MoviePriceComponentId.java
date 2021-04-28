@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.dataccess.entity.id;
 
 import com.epam.training.ticketservice.dataccess.entity.MovieEntity;
 import com.epam.training.ticketservice.dataccess.entity.PriceComponentEntity;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 
 @Embeddable
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode
 public class MoviePriceComponentId implements Serializable {
