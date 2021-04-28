@@ -227,7 +227,7 @@ class MovieControllerTest {
         String actual = movieController.deleteMovie(MOVIE_TITLE);
 
         //Then
-        verify(movieService, times(1)).deleteMovie(MOVIE_TITLE);
+        verify(movieService, times(1)).deleteMovieByTitle(MOVIE_TITLE);
         assertThat(actual, equalTo(String.format(MOVIE_DELETED_MESSAGE, MOVIE_TITLE)));
     }
 
@@ -236,13 +236,13 @@ class MovieControllerTest {
         //Given
         doThrow(MOVIE_NOT_FOUND_EXCEPTION)
                 .when(movieService)
-                .deleteMovie(any());
+                .deleteMovieByTitle(any());
 
         //When
         String actual = movieController.deleteMovie(MOVIE_TITLE);
 
         //Then
-        verify(movieService, times(1)).deleteMovie(MOVIE_TITLE);
+        verify(movieService, times(1)).deleteMovieByTitle(MOVIE_TITLE);
         assertThat(actual, equalTo(MOVIE_NOT_FOUND_EXCEPTION.getMessage()));
     }
 }
