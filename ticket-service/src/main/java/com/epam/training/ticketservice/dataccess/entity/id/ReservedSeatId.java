@@ -2,6 +2,7 @@ package com.epam.training.ticketservice.dataccess.entity.id;
 
 import com.epam.training.ticketservice.dataccess.entity.ScreeningEntity;
 import com.epam.training.ticketservice.dataccess.entity.SeatEntity;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 
 @Embeddable
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @EqualsAndHashCode
 public class ReservedSeatId implements Serializable {
