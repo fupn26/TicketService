@@ -1,16 +1,13 @@
 package com.epam.training.ticketservice.repository.impl;
 
 import com.epam.training.ticketservice.dao.PriceComponentDao;
-import com.epam.training.ticketservice.dao.entity.AccountEntity;
 import com.epam.training.ticketservice.dao.entity.PriceComponentEntity;
 import com.epam.training.ticketservice.domain.PriceComponent;
-import com.epam.training.ticketservice.repository.PriceComponentRepository;
 import com.epam.training.ticketservice.repository.exception.PriceComponentAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.PriceComponentNotFoundException;
 import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -20,7 +17,7 @@ import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -55,10 +52,7 @@ class PriceComponentRepositoryImplTest {
         priceComponentRepository.createPriceComponent(PRICE_COMPONENT);
 
         //Then
-        ArgumentCaptor<PriceComponentEntity> actual
-                = ArgumentCaptor.forClass(PriceComponentEntity.class);
-        verify(priceComponentDao, times(1)).save(actual.capture());
-        assertThat(PRICE_COMPONENT_ENTITY, equalTo(actual.getValue()));
+        verify(priceComponentDao, times(1)).save(PRICE_COMPONENT_ENTITY);
     }
 
     @Test
@@ -84,7 +78,7 @@ class PriceComponentRepositoryImplTest {
         PriceComponent actual = priceComponentRepository.getPriceComponentByName(PRICE_COMPONENT_NAME);
 
         //Then
-        assertThat(PRICE_COMPONENT, equalTo(actual));
+        assertThat(actual, equalTo(PRICE_COMPONENT));
     }
 
     @Test

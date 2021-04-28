@@ -18,7 +18,6 @@ import com.epam.training.ticketservice.repository.exception.ScreeningNotFoundExc
 import com.epam.training.ticketservice.repository.mapper.ScreeningMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -30,7 +29,7 @@ import java.util.Set;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -112,10 +111,7 @@ class ScreeningRepositoryImplTest {
         screeningRepository.createScreening(SCREENING);
 
         //Then
-        ArgumentCaptor<ScreeningEntity> screeningEntityArgumentCaptor = ArgumentCaptor.forClass(ScreeningEntity.class);
-        verify(screeningDao, times(1)).save(screeningEntityArgumentCaptor.capture());
-        ScreeningEntity actual = screeningEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(SCREENING_ENTITY));
+        verify(screeningDao, times(1)).save(SCREENING_ENTITY);
     }
 
     @Test
@@ -269,20 +265,11 @@ class ScreeningRepositoryImplTest {
         screeningRepository.deleteScreeningByMovieTitleRoomNameDate(MOVIE_TITLE, ROOM_NAME, TIME);
 
         //Then
-        ArgumentCaptor<String> movieTitleArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<String> roomNameArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        ArgumentCaptor<LocalDateTime> timeArgumentCaptor = ArgumentCaptor.forClass(LocalDateTime.class);
         verify(screeningDao, times(1)).deleteByMovie_TitleAndRoom_NameAndDateTime(
-                movieTitleArgumentCaptor.capture(),
-                roomNameArgumentCaptor.capture(),
-                timeArgumentCaptor.capture()
+                MOVIE_TITLE,
+                ROOM_NAME,
+                TIME
         );
-        String actualMovieTitle = movieTitleArgumentCaptor.getValue();
-        String actualRoomName = roomNameArgumentCaptor.getValue();
-        LocalDateTime actualTime = timeArgumentCaptor.getValue();
-        assertThat(actualMovieTitle, equalTo(MOVIE_TITLE));
-        assertThat(actualRoomName, equalTo(ROOM_NAME));
-        assertThat(actualTime, equalTo(TIME));
     }
 
     @Test
@@ -304,12 +291,7 @@ class ScreeningRepositoryImplTest {
         screeningRepository.deleteAllScreeningsByMovieName(MOVIE_TITLE);
 
         //Then
-        ArgumentCaptor<String> movieTitleArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(screeningDao, times(1)).deleteAllByMovie_Title(
-                movieTitleArgumentCaptor.capture()
-        );
-        String actualMovieTitle = movieTitleArgumentCaptor.getValue();
-        assertThat(actualMovieTitle, equalTo(MOVIE_TITLE));
+        verify(screeningDao, times(1)).deleteAllByMovie_Title(MOVIE_TITLE);
     }
 
     @Test
@@ -318,11 +300,6 @@ class ScreeningRepositoryImplTest {
         screeningRepository.deleteAllScreeningsByRoomName(ROOM_NAME);
 
         //Then
-        ArgumentCaptor<String> roomNameArgumentCaptor = ArgumentCaptor.forClass(String.class);
-        verify(screeningDao, times(1)).deleteAllByRoom_Name(
-                roomNameArgumentCaptor.capture()
-        );
-        String actualRoomName = roomNameArgumentCaptor.getValue();
-        assertThat(actualRoomName, equalTo(ROOM_NAME));
+        verify(screeningDao, times(1)).deleteAllByRoom_Name(ROOM_NAME);
     }
 }

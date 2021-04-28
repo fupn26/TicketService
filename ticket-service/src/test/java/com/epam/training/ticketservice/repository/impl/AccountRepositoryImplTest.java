@@ -8,7 +8,6 @@ import com.epam.training.ticketservice.repository.exception.AccountNotFoundExcep
 import com.epam.training.ticketservice.repository.mapper.AccountMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -49,10 +48,7 @@ class AccountRepositoryImplTest {
         accountRepository.createAccount(ACCOUNT);
 
         //Then
-        ArgumentCaptor<AccountEntity> accountEntityArgumentCaptor = ArgumentCaptor.forClass(AccountEntity.class);
-        verify(accountDao, times(1)).save(accountEntityArgumentCaptor.capture());
-        AccountEntity actual = accountEntityArgumentCaptor.getValue();
-        assertThat(actual, equalTo(ACCOUNT_ENTITY));
+        verify(accountDao, times(1)).save(ACCOUNT_ENTITY);
     }
 
     @Test
