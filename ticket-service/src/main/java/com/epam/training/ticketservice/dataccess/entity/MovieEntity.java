@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.dataccess.entity;
 import lombok.*;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -21,7 +22,7 @@ public class MovieEntity {
     @Min(1)
     @Setter
     private int length;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @Setter
     private Set<PriceComponentEntity> priceComponents;
 

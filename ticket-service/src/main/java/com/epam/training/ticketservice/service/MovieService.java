@@ -1,6 +1,7 @@
 package com.epam.training.ticketservice.service;
 
 import com.epam.training.ticketservice.domain.Movie;
+import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthException;
 import com.epam.training.ticketservice.repository.exception.MovieAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.MovieMalformedException;
 import com.epam.training.ticketservice.repository.exception.MovieNotFoundException;
@@ -13,8 +14,10 @@ public interface MovieService {
 
     List<Movie> getAllMovies();
 
+    Movie getMovieByTitle(String title) throws MovieNotFoundException;
+
     void updateMovie(String title, String genre, int lengthInMinutes) throws MovieNotFoundException,
             MovieMalformedException;
 
-    void deleteMovie(String title) throws MovieNotFoundException;
+    void deleteMovieByTitle(String title) throws MovieNotFoundException;
 }

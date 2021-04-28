@@ -76,7 +76,7 @@ public class MovieController {
     public String deleteMovie(String movieTitle) {
         String result;
         try {
-            movieService.deleteMovie(movieTitle);
+            movieService.deleteMovieByTitle(movieTitle);
             result = String.format(movieDeleteSuccess, movieTitle);
         } catch (MovieNotFoundException e) {
             result = e.getMessage();
