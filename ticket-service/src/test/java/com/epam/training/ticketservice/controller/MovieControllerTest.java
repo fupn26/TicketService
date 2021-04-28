@@ -35,8 +35,6 @@ class MovieControllerTest {
     @Mock
     private MovieService movieService;
 
-    private static final String ACCOUNT_NAME = "james";
-    private static final String ACCOUNT_PASSWORD = "bond";
     private static final String MOVIE_TITLE = "James Bond";
     private static final String MOVIE_GENRE = "action";
     private static final int MOVIE_LENGTH = 120;
@@ -48,8 +46,6 @@ class MovieControllerTest {
     private static final String MOVIE_EXISTS_MESSAGE = "Movie already exists";
     private static final String MOVIE_NOT_FOUND = "Movie not found";
     private static final String MOVIE_MALFORMED = "Movie length invalid";
-    private static final String NO_PRIVILEGED_ACCOUNT_MESSAGE = "you are not a privileged user";
-    private static final String NO_SIGNED_IN_ACCOUNT_MESSAGE = "you are not signed in";
     private static final String NO_MOVIES = "There are no movies at the moment";
     private static final String MOVIE_STRING_TEMPLATE = "%s (%s, %d minutes)";
     private static final List<String> MOVIE_STRING_LIST = List.of(
@@ -61,8 +57,6 @@ class MovieControllerTest {
             = new MovieNotFoundException(MOVIE_NOT_FOUND);
     private static final MovieMalformedException MOVIE_MALFORMED_EXCEPTION
             = new MovieMalformedException(MOVIE_MALFORMED);
-    private static final Account ACCOUNT = new Account(ACCOUNT_NAME, ACCOUNT_PASSWORD, false);
-    private static final Account ACCOUNT_PRIVILEGED = new Account(ACCOUNT_NAME, ACCOUNT_PASSWORD, true);
 
     private static Movie createMovie(String genre, int length, Set<PriceComponent> priceComponents) {
         Movie result = null;
@@ -114,45 +108,6 @@ class MovieControllerTest {
         //Then
         verify(movieService, times(1)).createMovie(MOVIE_TITLE, MOVIE_GENRE, MOVIE_LENGTH);
         assertThat(actual, equalTo(MOVIE_MALFORMED_EXCEPTION.getMessage()));
-    }
-
-    @Test
-    void testIsPrivilegedUserSignInWithSignedInAccountPrivileged() throws NoSignedInAccountException {
-        //Given
-        when(accountService.getSignedInAccount()).thenReturn(ACCOUNT_PRIVILEGED);
-
-        //When
-        Availability actual = movieController.isPrivilegedUserSignIn();
-
-        //Then
-        verify(accountService, times(1)).getSignedInAccount();
-        assertThat(actual.isAvailable(), equalTo(true));
-    }
-
-    @Test
-    void testIsPrivilegedUserSignInWithSignedInAccountNonPrivileged() throws NoSignedInAccountException {
-        //Given
-        when(accountService.getSignedInAccount()).thenReturn(ACCOUNT);
-
-        //When
-        Availability actual = movieController.isPrivilegedUserSignIn();
-
-        //Then
-        verify(accountService, times(1)).getSignedInAccount();
-        assertThat(actual.getReason(), equalTo(NO_PRIVILEGED_ACCOUNT_MESSAGE));
-    }
-
-    @Test
-    void testIsPrivilegedUserSignInWithoutSignedInAccount() throws NoSignedInAccountException {
-        //Given
-        when(accountService.getSignedInAccount()).thenThrow(NoSignedInAccountException.class);
-
-        //When
-        Availability actual = movieController.isPrivilegedUserSignIn();
-
-        //Then
-        verify(accountService, times(1)).getSignedInAccount();
-        assertThat(actual.getReason(), equalTo(NO_SIGNED_IN_ACCOUNT_MESSAGE));
     }
 
     @Test

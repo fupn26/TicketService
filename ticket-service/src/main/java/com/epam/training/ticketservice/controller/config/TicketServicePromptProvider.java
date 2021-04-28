@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.controller;
+package com.epam.training.ticketservice.controller.config;
 
 import org.jline.utils.AttributedString;
 import org.springframework.shell.jline.PromptProvider;
