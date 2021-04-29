@@ -161,4 +161,30 @@ class SeatRepositoryImplTest {
         //Then
         verify(seatDao, times(1)).deleteAllByRoom_Name(ROOM_NAME);
     }
+
+    @Test
+    void testDeleteSeatByRoomNameRowColumnWithExistingRow() throws SeatNotFoundException {
+        //Given
+        when(seatDao.findByRoom_NameAndRowAndColumn(any(), anyInt(), anyInt())).thenReturn(Optional.of(SEAT_ENTITY));
+
+        //When
+        seatRepository.deleteSeatByRoomNameRowColumn(ROOM_NAME, SEAT_ROW, SEAT_COLUMN);
+
+        //Then
+        verify(seatDao, times(1))
+                .findByRoom_NameAndRowAndColumn(ROOM_NAME, SEAT_ROW, SEAT_COLUMN);
+    }
+
+    @Test
+    void testDeleteSeatByRoomNameRowColumnWithNonExistingRowThrowsSeatNotFoundException()
+            throws SeatNotFoundException {
+        //Given
+        when(seatDao.findByRoom_NameAndRowAndColumn(any(), anyInt(), anyInt())).thenReturn(Optional.empty());
+
+        //Then
+        assertThrows(SeatNotFoundException.class, () -> {
+            //When
+            seatRepository.deleteSeatByRoomNameRowColumn(ROOM_NAME, SEAT_ROW, SEAT_COLUMN);
+        });
+    }
 }

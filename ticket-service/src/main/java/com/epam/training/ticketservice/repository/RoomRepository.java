@@ -12,7 +12,7 @@ public interface RoomRepository {
 
     List<Room> getAllRooms();
 
-    Room getRoomByName(String roomName) throws RoomNotFoundException, RoomMalformedException;
+    Room getRoomByName(String roomName) throws RoomNotFoundException;
 
     void updateRoom(Room roomToUpdate) throws RoomNotFoundException;
 

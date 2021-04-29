@@ -48,10 +48,10 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Room getRoomByName(String roomName) throws RoomNotFoundException, RoomMalformedException {
+    public Room getRoomByName(String roomName) throws RoomNotFoundException {
         Optional<Room> room = mapToRoom(getRoomEntityByName(roomName));
         if (room.isEmpty()) {
-            throw new RoomMalformedException(String.format("Room found but malformed: %s", roomName));
+            throw new RoomNotFoundException(String.format("Room not found: %s", roomName));
         }
         return room.get();
     }

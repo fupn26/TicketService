@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Repository
@@ -25,7 +26,9 @@ public class SeatRepositoryImpl implements SeatRepository {
 
     @Override
     public void createSeat(Seat seatToCreate) throws SeatAlreadyExistsException {
-        if (isSeatExists(seatToCreate)) {
+        if (isSeatExists(seatToCreate.getRoom().getName(),
+                seatToCreate.getRowNum(),
+                seatToCreate.getColumnNum())) {
             throw new SeatAlreadyExistsException(String.format("Seat exists: %s, <%d,%d>",
                     seatToCreate.getRoom().getName(),
                     seatToCreate.getRowNum(),
@@ -48,14 +51,24 @@ public class SeatRepositoryImpl implements SeatRepository {
     }
 
     @Override
+    public void deleteSeatByRoomNameRowColumn(String roomName, int row, int column) throws SeatNotFoundException {
+        if (!isSeatExists(roomName, row, column)) {
+            throw new SeatNotFoundException(String.format("Seat not found: %s, <%d,%d>",
+                    roomName,
+                    row,
+                    column));
+        }
+        seatDao.deleteByRoom_NameAndRowAndColumn(roomName, row, column);
+    }
+
+    @Override
+    @Transactional
     public void deleteAllByRoomName(String roomName) {
         seatDao.deleteAllByRoom_Name(roomName);
     }
 
-    private boolean isSeatExists(Seat seat) {
-        return seatDao.findByRoom_NameAndRowAndColumn(seat.getRoom().getName(),
-                seat.getRowNum(),
-                seat.getColumnNum()).isPresent();
+    private boolean isSeatExists(String roomName, int row, int column) {
+        return seatDao.findByRoom_NameAndRowAndColumn(roomName, row, column).isPresent();
     }
 
     private SeatEntity getSeatEntity(String roomName, int row, int column) throws SeatNotFoundException {

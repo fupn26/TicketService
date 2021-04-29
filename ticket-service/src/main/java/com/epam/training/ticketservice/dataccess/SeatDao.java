@@ -9,5 +9,7 @@ import java.util.UUID;
 public interface SeatDao extends JpaRepository<SeatEntity, UUID> {
     Optional<SeatEntity> findByRoom_NameAndRowAndColumn(String roomName, int row, int column);
 
+    void deleteByRoom_NameAndRowAndColumn(String roomName, int row, int column);
+
     void deleteAllByRoom_Name(String roomName);
 }
