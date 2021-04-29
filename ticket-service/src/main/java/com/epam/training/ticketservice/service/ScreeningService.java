@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface ScreeningService {
-    void createScreening(String movieTitle, String roomName, LocalDateTime dateTime)
+    void createScreening(String movieTitle, String roomName, LocalDateTime screeningDateTime)
             throws ScreeningAlreadyExistsException,
             MovieNotFoundException, RoomNotFoundException, OverlappingScreeningException,
             BreakTimeException;

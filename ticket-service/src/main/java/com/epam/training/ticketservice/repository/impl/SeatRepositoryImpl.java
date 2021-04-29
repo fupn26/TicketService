@@ -46,7 +46,7 @@ public class SeatRepositoryImpl implements SeatRepository {
             throw new SeatNotFoundException(String.format("Seat not found: %s, <%d,%d>",
                     roomName,
                     row,
-                    column));
+                    column), roomName, row, column);
         }
     }
 
@@ -56,7 +56,7 @@ public class SeatRepositoryImpl implements SeatRepository {
             throw new SeatNotFoundException(String.format("Seat not found: %s, <%d,%d>",
                     roomName,
                     row,
-                    column));
+                    column), roomName, row, column);
         }
         seatDao.deleteByRoom_NameAndRowAndColumn(roomName, row, column);
     }
@@ -77,7 +77,7 @@ public class SeatRepositoryImpl implements SeatRepository {
             throw new SeatNotFoundException(String.format("Seat not found: %s, <%d,%d>",
                     roomName,
                     row,
-                    column));
+                    column), roomName, row, column);
         }
         return seatEntity.get();
     }

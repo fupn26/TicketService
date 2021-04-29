@@ -28,18 +28,20 @@ public class ScreeningServiceImpl implements ScreeningService {
     private final RoomRepository roomRepository;
 
     @Override
-    public void createScreening(String movieTitle, String roomName, LocalDateTime dateTime)
+    public void createScreening(String movieTitle, String roomName, LocalDateTime screeningDateTime)
             throws ScreeningAlreadyExistsException, MovieNotFoundException,
             RoomNotFoundException, OverlappingScreeningException, BreakTimeException {
         Movie movie = getMovieByTitle(movieTitle);
         Room room = getRoomByName(roomName);
-        if (areAnyOverlappingScreenings(dateTime, dateTime.plusMinutes(movie.getLength()), roomName)) {
+        if (areAnyOverlappingScreenings(screeningDateTime,
+                screeningDateTime.plusMinutes(movie.getLength()), roomName)) {
             throw new OverlappingScreeningException("The screening is overlapping with other screening(s)");
         }
-        if (areAnyOverlappingScreeningsWithBreak(dateTime, dateTime.plusMinutes(movie.getLength()), roomName)) {
+        if (areAnyOverlappingScreeningsWithBreak(screeningDateTime,
+                screeningDateTime.plusMinutes(movie.getLength()), roomName)) {
             throw new BreakTimeException("The screening is overlapping with break time");
         }
-        screeningRepository.createScreening(new Screening(movie, room, dateTime));
+        screeningRepository.createScreening(new Screening(movie, room, screeningDateTime));
     }
 
     @Override
