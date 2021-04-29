@@ -11,5 +11,7 @@ public interface SeatRepository {
 
     Seat getSeatByRoomNameRowColumn(String roomName, int row, int column) throws SeatNotFoundException, InvalidColumnException, InvalidRowException;
 
+    void deleteSeatByRoomNameRowColumn(String roomName, int row, int column) throws SeatNotFoundException;
+
     void deleteAllByRoomName(String roomName);
 }

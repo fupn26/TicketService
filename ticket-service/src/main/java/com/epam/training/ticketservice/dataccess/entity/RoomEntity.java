@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.validation.constraints.Min;
@@ -26,7 +27,7 @@ public class RoomEntity {
     @Min(1)
     @Setter
     private int columns;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     @Setter
     private Set<PriceComponentEntity> priceComponentEntities;
 

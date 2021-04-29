@@ -201,7 +201,7 @@ class RoomRepositoryImplTest {
         when(roomMapper.mapToRoom(any())).thenThrow(new InvalidColumnException(""));
 
         //Then
-        assertThrows(RoomMalformedException.class, () -> {
+        assertThrows(RoomNotFoundException.class, () -> {
             //When
             roomRepository.getRoomByName(ROOM_NAME);
         });
@@ -215,7 +215,7 @@ class RoomRepositoryImplTest {
         when(roomMapper.mapToRoom(any())).thenThrow(new InvalidRowException(""));
 
         //Then
-        assertThrows(RoomMalformedException.class, () -> {
+        assertThrows(RoomNotFoundException.class, () -> {
             //When
             roomRepository.getRoomByName(ROOM_NAME);
         });
