@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -71,6 +72,7 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
     }
 
     @Override
+    @Transactional
     public void deleteScreeningByMovieTitleRoomNameDate(String movieTitle,
                                                         String roomName, LocalDateTime screeningTime)
             throws ScreeningNotFoundException {

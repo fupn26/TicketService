@@ -236,14 +236,14 @@ class ScreeningControllerTest {
     @Test
     void testListScreeningsWithExistingScreeningsReturnsScreenings() {
         //Given
-        when(screeningService.getAllScreening()).thenReturn(SCREENINGS);
+        when(screeningService.getAllScreenings()).thenReturn(SCREENINGS);
         when(dateTimeMapper.mapToString(any(), any())).thenReturn(SCREENING_DATE_TIME);
 
         //When
         String actual = screeningController.listScreenings();
 
         //Then
-        verify(screeningService, times(1)).getAllScreening();
+        verify(screeningService, times(1)).getAllScreenings();
         verify(dateTimeMapper, times(SCREENINGS.size())).mapToString(DATE_TIME, DATE_TIME_FORMAT);
         assertThat(actual, equalTo(SCREENINGS_STRING));
     }
@@ -251,13 +251,13 @@ class ScreeningControllerTest {
     @Test
     void testListScreeningsWithoutExistingScreeningsReturnsEmptyList() {
         //Given
-        when(screeningService.getAllScreening()).thenReturn(List.of());
+        when(screeningService.getAllScreenings()).thenReturn(List.of());
 
         //When
         String actual = screeningController.listScreenings();
 
         //Then
-        verify(screeningService, times(1)).getAllScreening();
+        verify(screeningService, times(1)).getAllScreenings();
         assertThat(actual, equalTo(NO_SCREENINGS_MESSAGE));
     }
 

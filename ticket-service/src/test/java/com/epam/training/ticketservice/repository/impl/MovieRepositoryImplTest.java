@@ -190,13 +190,13 @@ class MovieRepositoryImplTest {
     }
 
     @Test
-    void testGetMovieByTitleWithMovieMalformedException() throws InvalidMovieLengthException {
+    void testGetMovieByTitleWithInvalidMovieThrowsMovieNotFoundException() throws InvalidMovieLengthException {
         //Given
         when(movieDao.findById(any())).thenReturn(Optional.of(movieEntityInvalid));
         when(movieMapper.mapToMovie(any())).thenThrow(new InvalidMovieLengthException(""));
 
         //Then
-        assertThrows(MovieMalformedException.class, () -> {
+        assertThrows(MovieNotFoundException.class, () -> {
             //When
             movieRepository.getMovieByTitle(MOVIE_TITLE);
         });

@@ -69,7 +69,7 @@ public class ScreeningController {
     @ShellMethod(value = "Lists existing screenings", key = "list screenings")
     public String listScreenings() {
         String result;
-        List<Screening> screenings = screeningService.getAllScreening();
+        List<Screening> screenings = screeningService.getAllScreenings();
         if (screenings.isEmpty()) {
             result = noScreenings;
         } else {
