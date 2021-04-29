@@ -48,7 +48,6 @@ class ScreeningRepositoryImplTest {
 
     private static final String MOVIE_TITLE = "best movie";
     private static final String MOVIE_GENRE = "drama";
-    private static final int INVALID_MOVIE_LENGTH = 0;
     private static final int MOVIE_LENGTH = 100;
     private static final String ROOM_NAME = "best room";
     private static final int ROWS = 10;
@@ -219,7 +218,7 @@ class ScreeningRepositoryImplTest {
         when(screeningMapper.mapToScreening(any())).thenThrow(new InvalidColumnException(""));
 
         //Then
-        assertThrows(ScreeningMalformedException.class, () -> {
+        assertThrows(ScreeningNotFoundException.class, () -> {
             //When
             screeningRepository.getScreeningByMovieTitleRoomNameDate(MOVIE_TITLE, ROOM_NAME, TIME);
         });
@@ -234,7 +233,7 @@ class ScreeningRepositoryImplTest {
         when(screeningMapper.mapToScreening(any())).thenThrow(new InvalidRowException(""));
 
         //Then
-        assertThrows(ScreeningMalformedException.class, () -> {
+        assertThrows(ScreeningNotFoundException.class, () -> {
             //When
             screeningRepository.getScreeningByMovieTitleRoomNameDate(MOVIE_TITLE, ROOM_NAME, TIME);
         });
@@ -249,7 +248,7 @@ class ScreeningRepositoryImplTest {
         when(screeningMapper.mapToScreening(any())).thenThrow(new InvalidMovieLengthException(""));
 
         //Then
-        assertThrows(ScreeningMalformedException.class, () -> {
+        assertThrows(ScreeningNotFoundException.class, () -> {
             //When
             screeningRepository.getScreeningByMovieTitleRoomNameDate(MOVIE_TITLE, ROOM_NAME, TIME);
         });

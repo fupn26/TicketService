@@ -9,7 +9,8 @@ import com.epam.training.ticketservice.repository.exception.SeatNotFoundExceptio
 public interface SeatRepository {
     void createSeat(Seat seatToCreate) throws SeatAlreadyExistsException;
 
-    Seat getSeatByRoomNameRowColumn(String roomName, int row, int column) throws SeatNotFoundException, InvalidColumnException, InvalidRowException;
+    Seat getSeatByRoomNameRowColumn(String roomName, int row, int column) throws SeatNotFoundException,
+            InvalidColumnException, InvalidRowException;
 
     void deleteSeatByRoomNameRowColumn(String roomName, int row, int column) throws SeatNotFoundException;
 

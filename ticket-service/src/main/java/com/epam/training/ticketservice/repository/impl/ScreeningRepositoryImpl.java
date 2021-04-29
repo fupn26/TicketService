@@ -8,7 +8,6 @@ import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthExcept
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.repository.ScreeningRepository;
 import com.epam.training.ticketservice.repository.exception.ScreeningAlreadyExistsException;
-import com.epam.training.ticketservice.repository.exception.ScreeningMalformedException;
 import com.epam.training.ticketservice.repository.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.repository.mapper.ScreeningMapper;
 import lombok.RequiredArgsConstructor;
@@ -28,8 +27,8 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
 
     private final ScreeningDao screeningDao;
     private final ScreeningMapper screeningMapper;
-    private final String SCREENING_NOT_FOUND = "Screening not found: <%s> <%s> <%s>";
-    private final String SCREENING_ALREADY_EXISTS = "Screening already exists: %s";
+    private final String screeningNotFoundTemplate = "Screening not found: <%s> <%s> <%s>";
+    private final String screeningAlreadyExistsTemplate = "Screening already exists: %s";
 
     @Override
     public void createScreening(Screening screeningToCreate) throws ScreeningAlreadyExistsException {
@@ -38,7 +37,7 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
                 screeningToCreate.getRoom().getName(),
                 screeningToCreate.getStartDate()
         )) {
-            throw new ScreeningAlreadyExistsException(String.format(SCREENING_ALREADY_EXISTS,
+            throw new ScreeningAlreadyExistsException(String.format(screeningAlreadyExistsTemplate,
                     screeningToCreate));
         }
         screeningDao.save(screeningMapper.mapToScreeningEntity(screeningToCreate));
@@ -56,16 +55,16 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
     @Override
     public Screening getScreeningByMovieTitleRoomNameDate(String movieTitle,
                                                           String roomName, LocalDateTime screeningTime)
-            throws ScreeningNotFoundException, ScreeningMalformedException {
+            throws ScreeningNotFoundException {
         Optional<ScreeningEntity> screeningEntity = screeningDao.findByMovie_TitleAndRoom_NameAndDateTime(movieTitle,
                 roomName, screeningTime);
         if (screeningEntity.isEmpty()) {
-            throw new ScreeningNotFoundException(String.format(SCREENING_NOT_FOUND,
+            throw new ScreeningNotFoundException(String.format(screeningNotFoundTemplate,
                     movieTitle, roomName, mapToString(screeningTime)));
         }
         Optional<Screening> screening = mapToScreening(screeningEntity.get());
         if (screening.isEmpty()) {
-            throw new ScreeningMalformedException(String.format(SCREENING_NOT_FOUND,
+            throw new ScreeningNotFoundException(String.format(screeningNotFoundTemplate,
                     movieTitle, roomName, mapToString(screeningTime)));
         }
         return screening.get();
@@ -76,7 +75,7 @@ public class ScreeningRepositoryImpl implements ScreeningRepository {
                                                         String roomName, LocalDateTime screeningTime)
             throws ScreeningNotFoundException {
         if (!isScreeningExists(movieTitle, roomName, screeningTime)) {
-            throw new ScreeningNotFoundException(String.format(SCREENING_NOT_FOUND,
+            throw new ScreeningNotFoundException(String.format(screeningNotFoundTemplate,
                     movieTitle, roomName, mapToString(screeningTime)));
         }
         screeningDao.deleteByMovie_TitleAndRoom_NameAndDateTime(movieTitle, roomName, screeningTime);
