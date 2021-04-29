@@ -38,12 +38,7 @@ public class MovieServiceImpl implements MovieService {
 
     @Override
     public Movie getMovieByTitle(String title) throws MovieNotFoundException {
-        try {
-            return movieRepository.getMovieByTitle(title);
-        } catch (MovieMalformedException e) {
-            log.warn(e.getMessage());
-            throw new MovieNotFoundException(e.getMessage());
-        }
+        return movieRepository.getMovieByTitle(title);
     }
 
     @Override

@@ -108,8 +108,7 @@ class MovieServiceImplTest {
     }
 
     @Test
-    void testGetMovieByTitleWithExistingMovieReturnsMovie() throws MovieMalformedException,
-            MovieNotFoundException {
+    void testGetMovieByTitleWithExistingMovieReturnsMovie() throws MovieNotFoundException {
         //Given
         when(movieRepository.getMovieByTitle(any()))
                 .thenReturn(MOVIE);
@@ -120,20 +119,6 @@ class MovieServiceImplTest {
         //Then
         verify(movieRepository, times(1)).getMovieByTitle(MOVIE_TITLE);
         assertThat(actual, equalTo(MOVIE));
-    }
-
-    @Test
-    void testGetMovieByTitleWithInvalidMovieThrowsMovieNotFoundException() throws MovieMalformedException,
-            MovieNotFoundException {
-        //Given
-        when(movieRepository.getMovieByTitle(any()))
-                .thenThrow(MovieMalformedException.class);
-
-        //Then
-        assertThrows(MovieNotFoundException.class, () -> {
-            //When
-            movieService.getMovieByTitle(MOVIE_TITLE);
-        });
     }
 
     @Test

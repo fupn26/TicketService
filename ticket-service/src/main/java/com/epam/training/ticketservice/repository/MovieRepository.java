@@ -12,7 +12,7 @@ public interface MovieRepository {
 
     List<Movie> getAllMovies();
 
-    Movie getMovieByTitle(String movieTitle) throws MovieNotFoundException, MovieMalformedException;
+    Movie getMovieByTitle(String movieTitle) throws MovieNotFoundException;
 
     void updateMovie(Movie movieToUpdate) throws MovieNotFoundException;
 

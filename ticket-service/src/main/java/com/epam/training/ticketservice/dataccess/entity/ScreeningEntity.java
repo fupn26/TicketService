@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
@@ -41,7 +42,7 @@ public class ScreeningEntity {
     @Column(name = "date_time")
     private LocalDateTime dateTime;
     @Setter
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<PriceComponentEntity> priceComponents;
 
     public ScreeningEntity(MovieEntity movieEntity, RoomEntity roomEntity,

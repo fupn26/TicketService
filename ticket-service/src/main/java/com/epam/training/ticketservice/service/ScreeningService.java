@@ -19,5 +19,5 @@ public interface ScreeningService {
 
     void deleteScreening(String movieTitle, String roomName, LocalDateTime dateTime) throws ScreeningNotFoundException;
 
-    List<Screening> getAllScreening();
+    List<Screening> getAllScreenings();
 }

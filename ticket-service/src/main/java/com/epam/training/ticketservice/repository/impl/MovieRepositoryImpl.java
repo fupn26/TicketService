@@ -47,10 +47,10 @@ public class MovieRepositoryImpl implements MovieRepository {
     }
 
     @Override
-    public Movie getMovieByTitle(String movieTitle) throws MovieNotFoundException, MovieMalformedException {
+    public Movie getMovieByTitle(String movieTitle) throws MovieNotFoundException {
         Optional<Movie> movie = mapToMovie(getMovieEntityByTitle(movieTitle));
         if (movie.isEmpty()) {
-            throw new MovieMalformedException(String.format("Movie found but malformed: %s", movieTitle));
+            throw new MovieNotFoundException(String.format("Movie not found: %s", movieTitle));
         }
         return movie.get();
     }
