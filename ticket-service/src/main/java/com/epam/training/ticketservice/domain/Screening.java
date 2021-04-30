@@ -8,23 +8,27 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Getter
 @EqualsAndHashCode
 public class Screening {
+    private final UUID uuid;
     private final Movie movie;
     private final Room room;
     private final LocalDateTime startDate;
     private final Set<PriceComponent> priceComponents;
 
     public Screening(Movie movie, Room room, LocalDateTime startDate) {
+        this.uuid = null;
         this.movie = movie;
         this.room = room;
         this.startDate = startDate;
         this.priceComponents = new HashSet<>();
     }
 
-    public Screening(Movie movie, Room room, LocalDateTime startDate, Set<PriceComponent> priceComponents) {
+    public Screening(UUID uuid, Movie movie, Room room, LocalDateTime startDate, Set<PriceComponent> priceComponents) {
+        this.uuid = uuid;
         this.movie = movie;
         this.room = room;
         this.startDate = startDate;

@@ -27,6 +27,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -95,9 +96,10 @@ class BookingServiceImplTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, Set.of());
-    private static final Screening SCREENING_WITH_PRICE_COMPONENTS = new Screening(MOVIE_WITH_PRICE_COMPONENT,
-            ROOM_WITH_PRICE_COMPONENTS, TIME, PRICE_COMPONENTS);
+    private static final UUID ID = UUID.randomUUID();
+    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME);
+    private static final Screening SCREENING_WITH_PRICE_COMPONENTS_AND_ID
+            = new Screening(ID, MOVIE_WITH_PRICE_COMPONENT, ROOM_WITH_PRICE_COMPONENTS, TIME, PRICE_COMPONENTS);
 
     private static final Seat SEAT_1 = createSeat(ROOM, ROWS - 2, COLUMNS - 1);
     private static final SeatDto SEAT_DTO_1 = new SeatDto(ROWS - 2, COLUMNS - 1);
@@ -167,7 +169,8 @@ class BookingServiceImplTest {
             NoSignedInAccountException, PrivilegedAccountException, SeatAlreadyBookedException,
             SeatDuplicatedException, SeatNotFoundException, InvalidColumnException, InvalidRowException {
         //Given
-        when(screeningRepository.getScreeningByMovieTitleRoomNameDate(any(), any(), any())).thenReturn(SCREENING_WITH_PRICE_COMPONENTS);
+        when(screeningRepository.getScreeningByMovieTitleRoomNameDate(any(), any(), any()))
+                .thenReturn(SCREENING_WITH_PRICE_COMPONENTS_AND_ID);
         when(accountService.getSignedInAccount()).thenReturn(ACCOUNT);
         when(bookingRepository.getBookingsByScreening(any())).thenReturn(List.of(BOOKING_1, BOOKING_1));
         when(basePriceRepository.getBasePrice()).thenReturn(BASE_PRICE);
@@ -240,7 +243,7 @@ class BookingServiceImplTest {
             NoSignedInAccountException, InvalidColumnException, SeatNotFoundException, InvalidRowException {
         //Given
         when(screeningRepository.getScreeningByMovieTitleRoomNameDate(any(), any(), any()))
-                .thenReturn(SCREENING_WITH_PRICE_COMPONENTS);
+                .thenReturn(SCREENING_WITH_PRICE_COMPONENTS_AND_ID);
         when(accountService.getSignedInAccount()).thenReturn(ACCOUNT);
         when(seatRepository.getSeatByRoomNameRowColumn(any(), anyInt(), anyInt()))
                 .thenReturn(SEAT_1).thenReturn(SEAT_1);
@@ -258,7 +261,7 @@ class BookingServiceImplTest {
             NoSignedInAccountException, InvalidColumnException, SeatNotFoundException, InvalidRowException {
         //Given
         when(screeningRepository.getScreeningByMovieTitleRoomNameDate(any(), any(), any()))
-                .thenReturn(SCREENING_WITH_PRICE_COMPONENTS);
+                .thenReturn(SCREENING_WITH_PRICE_COMPONENTS_AND_ID);
         when(accountService.getSignedInAccount()).thenReturn(ACCOUNT);
         when(seatRepository.getSeatByRoomNameRowColumn(any(), anyInt(), anyInt()))
                 .thenThrow(InvalidRowException.class);

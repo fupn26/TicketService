@@ -76,19 +76,19 @@ class ScreeningServiceImplTest {
         return result;
     }
 
-    private static final Screening SCREENING_1 = new Screening(MOVIE, ROOM, TIME, Set.of());
-    private static final Screening SCREENING_2 = new Screening(MOVIE, ROOM, TIME.plusMinutes(30), Set.of());
-    private static final Screening SCREENING_3 = new Screening(MOVIE, ROOM, TIME.plusMinutes(60), Set.of());
+    private static final Screening SCREENING_1 = new Screening(MOVIE, ROOM, TIME);
+    private static final Screening SCREENING_2 = new Screening(MOVIE, ROOM, TIME.plusMinutes(30));
+    private static final Screening SCREENING_3 = new Screening(MOVIE, ROOM, TIME.plusMinutes(60));
     private static final Screening NEW_NOT_OVERLAPPING_SCREENING = new Screening(MOVIE, ROOM,
-            TIME.plusMinutes(90), Set.of());
+            TIME.plusMinutes(90));
     private static final Screening OVERLAPPING_SCREENING_START_OVERLAPPED = new Screening(MOVIE, ROOM,
-            TIME.plusMinutes(35), Set.of());
+            TIME.plusMinutes(35));
     private static final Screening OVERLAPPING_SCREENING_END_OVERLAPPED = new Screening(MOVIE, ROOM,
-            TIME.plusMinutes(-10), Set.of());
+            TIME.plusMinutes(-10));
     private static final Screening OVERLAPPING_SCREENING_START_BREAK_OVERLAPPED = new Screening(MOVIE, ROOM,
-            TIME.plusMinutes(85), Set.of());
+            TIME.plusMinutes(85));
     private static final Screening OVERLAPPING_SCREENING_END_BREAK_OVERLAPPED = new Screening(MOVIE, ROOM,
-            TIME.plusMinutes(-25), Set.of());
+            TIME.plusMinutes(-25));
     private static final List<Screening> SCREENINGS = List.of(SCREENING_1, SCREENING_2, SCREENING_3);
 
     @Test

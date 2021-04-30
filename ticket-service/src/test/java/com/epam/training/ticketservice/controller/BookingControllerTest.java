@@ -83,7 +83,7 @@ class BookingControllerTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, Set.of());
+    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME);
 
     private static final Seat SEAT_1 = createSeat(ROOM, ROWS - 2, COLUMNS - 1);
     private static final SeatDto SEAT_DTO_1 = new SeatDto(ROWS - 2, COLUMNS - 1);

@@ -76,7 +76,7 @@ class AccountControllerTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, Set.of());
+    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME);
 
     private static final Seat SEAT_1 = createSeat(ROOM, ROWS - 2, COLUMNS - 1);
     private static final Seat SEAT_2 = createSeat(ROOM, ROWS - 3, COLUMNS - 2);

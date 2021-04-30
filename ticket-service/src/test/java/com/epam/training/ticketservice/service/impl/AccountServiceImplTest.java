@@ -23,6 +23,7 @@ import java.time.LocalDateTime;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -84,7 +85,8 @@ class AccountServiceImplTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, PRICE_COMPONENTS);
+    private static final UUID ID = UUID.randomUUID();
+    private static final Screening SCREENING = new Screening(ID, MOVIE, ROOM, TIME, PRICE_COMPONENTS);
 
     private static final Seat SEAT_1 = createSeat(ROOM, ROWS - 2, COLUMNS - 1);
     private static final Seat SEAT_2 = createSeat(ROOM, ROWS - 3, COLUMNS - 2);
