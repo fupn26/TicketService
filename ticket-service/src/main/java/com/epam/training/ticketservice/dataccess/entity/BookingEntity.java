@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.dataccess.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -21,6 +22,7 @@ public class BookingEntity {
 
     @Id
     @GeneratedValue
+    @Type(type = "uuid-char")
     private UUID id;
     @ManyToOne
     private ScreeningEntity screening;

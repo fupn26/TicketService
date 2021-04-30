@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +26,7 @@ public class SeatEntity {
 
     @Id
     @GeneratedValue
+    @Type(type = "uuid-char")
     private UUID id;
     @ManyToOne
     @JoinColumn(name = "room_id")
