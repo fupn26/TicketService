@@ -25,11 +25,11 @@ public class BookingEntity {
     @ManyToOne
     private AccountEntity account;
     @OneToMany
-    private List<ReservedSeatEntity> seats;
+    private List<SeatEntity> seats;
     private int price;
 
     public BookingEntity(ScreeningEntity screeningEntity, AccountEntity accountEntity,
-                         List<ReservedSeatEntity> reservedSeatEntities, int price) {
+                         List<SeatEntity> reservedSeatEntities, int price) {
         this.screening = screeningEntity;
         this.account = accountEntity;
         this.seats = reservedSeatEntities;

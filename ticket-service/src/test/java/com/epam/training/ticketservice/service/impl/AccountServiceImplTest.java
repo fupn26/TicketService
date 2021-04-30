@@ -6,9 +6,9 @@ import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthExcept
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.domain.exception.InvalidSeatException;
 import com.epam.training.ticketservice.repository.AccountRepository;
+import com.epam.training.ticketservice.repository.BookingRepository;
 import com.epam.training.ticketservice.repository.exception.AccountAlreadyExistsException;
 import com.epam.training.ticketservice.repository.exception.AccountNotFoundException;
-import com.epam.training.ticketservice.service.BookingService;
 import com.epam.training.ticketservice.service.exception.NoSignedInAccountException;
 import com.epam.training.ticketservice.service.exception.PrivilegedAccountException;
 import com.epam.training.ticketservice.service.exception.SignInFailedException;
@@ -37,7 +37,7 @@ class AccountServiceImplTest {
     @Mock
     private AccountRepository accountRepository;
     @Mock
-    private BookingService bookingService;
+    private BookingRepository bookingRepository;
 
     private static final String USERNAME = "james";
     private static final String PASSWORD = "bond";
@@ -310,7 +310,7 @@ class AccountServiceImplTest {
             throws PrivilegedAccountException, NoSignedInAccountException,
             AccountNotFoundException, SignInFailedException {
         //Given
-        when(bookingService.getBookingsByUserName(USERNAME)).thenReturn(BOOKINGS);
+        when(bookingRepository.getBookingsByUserName(USERNAME)).thenReturn(BOOKINGS);
         when(accountRepository.getAccountByUserName(any())).thenReturn(ACCOUNT);
         accountService.signInAccount(USERNAME, PASSWORD);
 

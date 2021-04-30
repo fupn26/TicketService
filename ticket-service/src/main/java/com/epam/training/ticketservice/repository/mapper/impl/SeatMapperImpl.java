@@ -17,13 +17,18 @@ public class SeatMapperImpl implements SeatMapper {
 
     @Override
     public Seat mapToSeat(SeatEntity seatEntityToMap) throws InvalidColumnException, InvalidRowException {
-        return new Seat(roomMapper.mapToRoom(seatEntityToMap.getRoom()),
+        return new Seat(seatEntityToMap.getId(), roomMapper.mapToRoom(seatEntityToMap.getRoom()),
                 seatEntityToMap.getRow(), seatEntityToMap.getColumn());
     }
 
     @Override
     public SeatEntity mapToSeatEntity(Seat seatToMap) {
-        return new SeatEntity(roomMapper.mapToRoomEntity(seatToMap.getRoom()),
-                seatToMap.getRowNum(), seatToMap.getColumnNum());
+        if (seatToMap.getId() == null) {
+            return new SeatEntity(roomMapper.mapToRoomEntity(seatToMap.getRoom()),
+                    seatToMap.getRowNum(), seatToMap.getColumnNum());
+        } else {
+            return new SeatEntity(seatToMap.getId(), roomMapper.mapToRoomEntity(seatToMap.getRoom()),
+                    seatToMap.getRowNum(), seatToMap.getColumnNum());
+        }
     }
 }

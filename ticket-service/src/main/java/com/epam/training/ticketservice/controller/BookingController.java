@@ -11,6 +11,8 @@ import com.epam.training.ticketservice.repository.exception.RoomNotFoundExceptio
 import com.epam.training.ticketservice.repository.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.repository.exception.SeatNotFoundException;
 import com.epam.training.ticketservice.service.BookingService;
+import com.epam.training.ticketservice.service.exception.NoSignedInAccountException;
+import com.epam.training.ticketservice.service.exception.PrivilegedAccountException;
 import com.epam.training.ticketservice.service.exception.SeatAlreadyBookedException;
 import com.epam.training.ticketservice.service.exception.SeatDuplicatedException;
 import org.springframework.shell.Availability;
@@ -55,8 +57,8 @@ public class BookingController {
                     dateTimeMapper.mapToLocalDateTime(screeningDateTime, dateTimeFormat),
                     mapStringToSeatDtoList(seatsToBook));
             result = mapBookingToString(booking);
-        } catch (MovieNotFoundException | RoomNotFoundException
-                | SeatDuplicatedException | ScreeningNotFoundException e) {
+        } catch (SeatDuplicatedException | ScreeningNotFoundException
+                | NoSignedInAccountException | PrivilegedAccountException e) {
             result = e.getMessage();
         } catch (SeatNotFoundException e) {
             result = String.format(seatNotFoundMessageTemplate,

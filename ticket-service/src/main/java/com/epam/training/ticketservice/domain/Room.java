@@ -7,10 +7,11 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Getter
-@EqualsAndHashCode
+//@EqualsAndHashCode
 public class Room {
     private final String name;
     private final int rows;
@@ -59,5 +60,19 @@ public class Room {
         if (columnNum < 1) {
             throw new InvalidColumnException("Number of columns is not valid");
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Room room = (Room) o;
+        return rows == room.rows && columns == room.columns && name.equals(room.name)
+                && priceComponents.equals(room.priceComponents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, rows, columns, priceComponents);
     }
 }
