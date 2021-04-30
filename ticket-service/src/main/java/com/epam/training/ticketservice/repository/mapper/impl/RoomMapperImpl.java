@@ -18,8 +18,8 @@ public class RoomMapperImpl implements RoomMapper {
     @Override
     public Room mapToRoom(RoomEntity roomEntityToMap) throws InvalidRowException, InvalidColumnException {
         return new Room(roomEntityToMap.getName(),
-                roomEntityToMap.getRows(),
-                roomEntityToMap.getColumns(),
+                roomEntityToMap.getRoomRows(),
+                roomEntityToMap.getRoomColumns(),
                 priceComponentMapper.mapToPriceComponents(roomEntityToMap.getPriceComponentEntities()));
     }
 

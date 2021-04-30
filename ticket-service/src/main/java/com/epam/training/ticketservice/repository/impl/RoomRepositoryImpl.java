@@ -7,14 +7,12 @@ import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.repository.RoomRepository;
 import com.epam.training.ticketservice.repository.exception.RoomAlreadyExistsException;
-import com.epam.training.ticketservice.repository.exception.RoomMalformedException;
 import com.epam.training.ticketservice.repository.exception.RoomNotFoundException;
 import com.epam.training.ticketservice.repository.mapper.PriceComponentMapper;
 import com.epam.training.ticketservice.repository.mapper.RoomMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -59,8 +57,8 @@ public class RoomRepositoryImpl implements RoomRepository {
     @Override
     public void updateRoom(Room roomToUpdate) throws RoomNotFoundException {
         RoomEntity roomEntity = getRoomEntityByName(roomToUpdate.getName());
-        roomEntity.setRows(roomToUpdate.getRows());
-        roomEntity.setColumns(roomToUpdate.getColumns());
+        roomEntity.setRoomRows(roomToUpdate.getRows());
+        roomEntity.setRoomColumns(roomToUpdate.getColumns());
         roomEntity.setPriceComponentEntities(priceComponentMapper.mapToPriceComponentEntities(
                 roomToUpdate.getPriceComponents())
         );
