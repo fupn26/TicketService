@@ -23,10 +23,10 @@ public class RoomEntity {
     private String name;
     @Min(1)
     @Setter
-    private int rows;
+    private int roomRows;
     @Min(1)
     @Setter
-    private int columns;
+    private int roomColumns;
     @OneToMany(fetch = FetchType.EAGER)
     @Setter
     private Set<PriceComponentEntity> priceComponentEntities;
@@ -34,8 +34,8 @@ public class RoomEntity {
     public RoomEntity(String name, int rows, int columns,
                       Set<PriceComponentEntity> priceComponentEntities) {
         this.name = name;
-        this.rows = rows;
-        this.columns = columns;
+        this.roomRows = rows;
+        this.roomColumns = columns;
         this.priceComponentEntities = priceComponentEntities;
     }
 }
