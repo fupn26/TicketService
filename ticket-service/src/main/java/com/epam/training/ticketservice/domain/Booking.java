@@ -27,7 +27,7 @@ public class Booking {
 
     private void validateSeats(Screening screening, Set<Seat> seatList) throws InvalidSeatException {
         for (Seat seat : seatList) {
-            if (!seat.getRoom().equals(screening.getRoom())) {
+            if (!seat.getRoom().getName().equals(screening.getRoom().getName())) {
                 throw new InvalidSeatException("The room of the screening and the seat is not the same");
             }
         }

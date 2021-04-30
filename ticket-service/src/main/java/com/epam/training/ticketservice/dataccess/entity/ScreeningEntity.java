@@ -17,6 +17,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
@@ -24,7 +25,6 @@ import java.util.UUID;
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"room_id", "date_time"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode
 public class ScreeningEntity {
 
     @Id
@@ -51,5 +51,35 @@ public class ScreeningEntity {
         room = roomEntity;
         dateTime = startDateTime;
         this.priceComponents = priceComponents;
+    }
+
+    public ScreeningEntity(UUID screeningId, MovieEntity movieEntity, RoomEntity roomEntity,
+                           LocalDateTime startDateTime, Set<PriceComponentEntity> screeningPriceComponents) {
+        id = screeningId;
+        movie = movieEntity;
+        room = roomEntity;
+        dateTime = startDateTime;
+        priceComponents = screeningPriceComponents;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (id == null) {
+            return false;
+        }
+        ScreeningEntity that = (ScreeningEntity) o;
+        return Objects.equals(id, that.id) && movie.equals(that.movie) && room.equals(that.room)
+                && dateTime.equals(that.dateTime) && priceComponents.equals(that.priceComponents);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, movie, room, dateTime, priceComponents);
     }
 }

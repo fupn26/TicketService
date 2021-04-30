@@ -24,6 +24,7 @@ public class ScreeningMapperImpl implements ScreeningMapper {
     public Screening mapToScreening(ScreeningEntity screeningEntityToMap) throws InvalidMovieLengthException,
             InvalidColumnException, InvalidRowException {
         return new Screening(
+                screeningEntityToMap.getId(),
                 movieMapper.mapToMovie(screeningEntityToMap.getMovie()),
                 roomMapper.mapToRoom(screeningEntityToMap.getRoom()),
                 screeningEntityToMap.getDateTime(),
@@ -33,11 +34,21 @@ public class ScreeningMapperImpl implements ScreeningMapper {
 
     @Override
     public ScreeningEntity mapToScreeningEntity(Screening screeningToMap) {
-        return new ScreeningEntity(
-                movieMapper.mapToMovieEntity(screeningToMap.getMovie()),
-                roomMapper.mapToRoomEntity(screeningToMap.getRoom()),
-                screeningToMap.getStartDate(),
-                priceComponentMapper.mapToPriceComponentEntities(screeningToMap.getPriceComponents())
-        );
+        if (screeningToMap.getUuid() == null) {
+            return new ScreeningEntity(
+                    movieMapper.mapToMovieEntity(screeningToMap.getMovie()),
+                    roomMapper.mapToRoomEntity(screeningToMap.getRoom()),
+                    screeningToMap.getStartDate(),
+                    priceComponentMapper.mapToPriceComponentEntities(screeningToMap.getPriceComponents())
+            );
+        } else {
+            return new ScreeningEntity(
+                    screeningToMap.getUuid(),
+                    movieMapper.mapToMovieEntity(screeningToMap.getMovie()),
+                    roomMapper.mapToRoomEntity(screeningToMap.getRoom()),
+                    screeningToMap.getStartDate(),
+                    priceComponentMapper.mapToPriceComponentEntities(screeningToMap.getPriceComponents())
+            );
+        }
     }
 }

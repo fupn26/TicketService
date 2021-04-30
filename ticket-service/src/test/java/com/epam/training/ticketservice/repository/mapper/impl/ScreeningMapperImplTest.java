@@ -22,9 +22,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.LocalDateTime;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -87,13 +90,33 @@ class ScreeningMapperImplTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, PRICE_COMPONENTS);
-    private static final ScreeningEntity SCREENING_ENTITY = new ScreeningEntity(MOVIE_ENTITY, ROOM_ENTITY,
-            TIME, PRICE_COMPONENT_ENTITIES);
+    private static final UUID ID = UUID.randomUUID();
+    private static final Screening SCREENING_WITHOUT_ID_AND_PRICE_COMPONENT = new Screening(MOVIE, ROOM, TIME);
+    private static final Screening SCREENING = new Screening(ID, MOVIE, ROOM, TIME, PRICE_COMPONENTS);
+    private static final ScreeningEntity SCREENING_ENTITY
+            = new ScreeningEntity(ID, MOVIE_ENTITY, ROOM_ENTITY, TIME, PRICE_COMPONENT_ENTITIES);
+    private static final ScreeningEntity SCREENING_ENTITY_WITHOUT_ID_AND_PRICE_COMPONENT
+            = new ScreeningEntity(MOVIE_ENTITY, ROOM_ENTITY, TIME, Set.of());
 
 
     @Test
-    void testMapToScreeningWithoutError() throws InvalidMovieLengthException, InvalidColumnException, InvalidRowException {
+    void testMapToScreeningWithoutIdAndComponents() throws InvalidMovieLengthException,
+            InvalidColumnException, InvalidRowException {
+        //Given
+        when(movieMapper.mapToMovie(any())).thenReturn(MOVIE);
+        when(roomMapper.mapToRoom(any())).thenReturn(ROOM);
+        when(priceComponentMapper.mapToPriceComponents(any())).thenReturn(Set.of());
+
+        //When
+        Screening actual = screeningMapper.mapToScreening(SCREENING_ENTITY_WITHOUT_ID_AND_PRICE_COMPONENT);
+
+        //Then
+        assertThat(actual, equalTo(SCREENING_WITHOUT_ID_AND_PRICE_COMPONENT));
+    }
+
+    @Test
+    void testMapToScreeningWithIdAndComponents() throws InvalidMovieLengthException,
+            InvalidColumnException, InvalidRowException {
         //Given
         when(movieMapper.mapToMovie(any())).thenReturn(MOVIE);
         when(roomMapper.mapToRoom(any())).thenReturn(ROOM);
@@ -146,7 +169,22 @@ class ScreeningMapperImplTest {
     }
 
     @Test
-    void testMapToScreeningEntityWithoutError() {
+    void testMapToScreeningEntityWithoutIdAndComponents() {
+        //Given
+        when(movieMapper.mapToMovieEntity(any())).thenReturn(MOVIE_ENTITY);
+        when(roomMapper.mapToRoomEntity(any())).thenReturn(ROOM_ENTITY);
+        when(priceComponentMapper.mapToPriceComponentEntities(any())).thenReturn(PRICE_COMPONENT_ENTITIES);
+
+        //When
+        ScreeningEntity actual = screeningMapper.mapToScreeningEntity(SCREENING_WITHOUT_ID_AND_PRICE_COMPONENT);
+
+        //Then
+        assertThat(actual, is(not(equalTo(SCREENING_ENTITY_WITHOUT_ID_AND_PRICE_COMPONENT))));
+    }
+
+
+    @Test
+    void testMapToScreeningEntityWithIdAndComponents() {
         //Given
         when(movieMapper.mapToMovieEntity(any())).thenReturn(MOVIE_ENTITY);
         when(roomMapper.mapToRoomEntity(any())).thenReturn(ROOM_ENTITY);

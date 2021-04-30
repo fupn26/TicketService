@@ -98,7 +98,7 @@ class ScreeningControllerTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, DATE_TIME, Set.of());
+    private static final Screening SCREENING = new Screening(MOVIE, ROOM, DATE_TIME);
     private static final List<Screening> SCREENINGS = List.of(SCREENING, SCREENING, SCREENING);
     private static final String SCREENINGS_STRING = SCREENINGS.stream()
             .map(screening ->

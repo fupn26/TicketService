@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -91,7 +92,8 @@ class ScreeningRepositoryImplTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, PRICE_COMPONENTS);
+    private static final UUID ID = UUID.randomUUID();
+    private static final Screening SCREENING = new Screening(ID, MOVIE, ROOM, TIME, PRICE_COMPONENTS);
     private static final ScreeningEntity SCREENING_ENTITY = new ScreeningEntity(MOVIE_ENTITY, ROOM_ENTITY,
             TIME, PRICE_COMPONENT_ENTITIES);
     private static final List<Screening> SCREENINGS = List.of(SCREENING, SCREENING, SCREENING);
