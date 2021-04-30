@@ -50,16 +50,9 @@ class AccountControllerTest {
     private static final int ROWS = 10;
     private static final int COLUMNS = 20;
     private static final LocalDateTime TIME = LocalDateTime.now();
+    private static final int PRICE = 1500;
 
-    private static final String PRICE_COMPONENT_NAME = "glamour";
-    private static final int PRICE_COMPONENT_VALUE = -200;
-    private static final int BASE_PRICE = 1500;
-
-    private static final PriceComponent PRICE_COMPONENT = new PriceComponent(PRICE_COMPONENT_NAME,
-            PRICE_COMPONENT_VALUE);
-    private static final Set<PriceComponent> PRICE_COMPONENTS = Set.of(PRICE_COMPONENT);
-
-    private static final Movie MOVIE = createMovie(MOVIE_GENRE, MOVIE_LENGTH, PRICE_COMPONENTS);
+    private static final Movie MOVIE = createMovie(MOVIE_GENRE, MOVIE_LENGTH, Set.of());
 
     private static Movie createMovie(String genre, int length, Set<PriceComponent> priceComponents) {
         Movie result = null;
@@ -71,7 +64,7 @@ class AccountControllerTest {
         return result;
     }
 
-    private static final Room ROOM = createRoom(ROOM_NAME, ROWS, COLUMNS, PRICE_COMPONENTS);
+    private static final Room ROOM = createRoom(ROOM_NAME, ROWS, COLUMNS, Set.of());
 
     private static Room createRoom(String roomName, int rows, int columns, Set<PriceComponent> priceComponents) {
         Room result = null;
@@ -83,7 +76,7 @@ class AccountControllerTest {
         return result;
     }
 
-    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, PRICE_COMPONENTS);
+    private static final Screening SCREENING = new Screening(MOVIE, ROOM, TIME, Set.of());
 
     private static final Seat SEAT_1 = createSeat(ROOM, ROWS - 2, COLUMNS - 1);
     private static final Seat SEAT_2 = createSeat(ROOM, ROWS - 3, COLUMNS - 2);
@@ -109,7 +102,7 @@ class AccountControllerTest {
 
     private static final Account ACCOUNT = new Account(USERNAME, PASSWORD, false);
     private static final Account PRIVILEGED_ACCOUNT = new Account(USERNAME, PASSWORD, true);
-    private static final Booking BOOKING = createBooking(SCREENING, ACCOUNT, SEATS, BASE_PRICE);
+    private static final Booking BOOKING = createBooking(SCREENING, ACCOUNT, SEATS, PRICE);
 
     private static  Booking createBooking(Screening screening, Account account,
                                           LinkedHashSet<Seat> seats, int basePrice) {
@@ -131,7 +124,7 @@ class AccountControllerTest {
             + "Seats " + "(" + SEAT_1.getRowNum() + "," + SEAT_1.getColumnNum() + "), "
             + "(" + SEAT_2.getRowNum() + "," + SEAT_2.getColumnNum() + ") "
             + "on " + MOVIE_TITLE + " in room " + ROOM_NAME + " starting at " + mapDateToString(TIME)
-            + " for " + 1800 + " HUF";
+            + " for " + PRICE + " HUF";
     private static final String NON_PRIVILEGED_LOGIN_WITHOUT_BOOKINGS = "Signed in with account '"
             + USERNAME
             + "'"

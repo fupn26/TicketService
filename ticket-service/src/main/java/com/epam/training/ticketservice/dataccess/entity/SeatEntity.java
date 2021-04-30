@@ -14,13 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 import javax.validation.constraints.Min;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"room_id", "row_num", "column_num"})})
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-@EqualsAndHashCode
 public class SeatEntity {
 
     @Id
@@ -40,5 +40,32 @@ public class SeatEntity {
         room = roomEntity;
         row = rowOfSeat;
         column = columnOfSeat;
+    }
+
+    public SeatEntity(UUID seatId, RoomEntity roomEntity, int rowOfSeat, int columnOfSeat) {
+        room = roomEntity;
+        row = rowOfSeat;
+        column = columnOfSeat;
+        id = seatId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (id == null) {
+            return false;
+        }
+        SeatEntity that = (SeatEntity) o;
+        return row == that.row && column == that.column && Objects.equals(id, that.id) && room.equals(that.room);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, room, row, column);
     }
 }

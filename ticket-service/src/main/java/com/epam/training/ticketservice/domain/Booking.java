@@ -1,26 +1,28 @@
 package com.epam.training.ticketservice.domain;
 
 import com.epam.training.ticketservice.domain.exception.InvalidSeatException;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Getter
+@EqualsAndHashCode
 public class Booking {
     private final Screening screening;
     private final Account account;
     private final LinkedHashSet<Seat> seatList;
     private final int price;
 
-    public Booking(Screening screening, Account account, LinkedHashSet<Seat> seatList, int basePrice)
+    public Booking(Screening screening, Account account, LinkedHashSet<Seat> seatList, int price)
             throws InvalidSeatException {
         validateSeats(screening, seatList);
 
         this.screening = screening;
         this.account = account;
         this.seatList = seatList;
-        this.price = calculatePrice(basePrice);
+        this.price = price;
     }
 
     private void validateSeats(Screening screening, Set<Seat> seatList) throws InvalidSeatException {
@@ -29,19 +31,5 @@ public class Booking {
                 throw new InvalidSeatException("The room of the screening and the seat is not the same");
             }
         }
-    }
-
-    private int calculatePrice(int basePrice) {
-        int result = basePrice;
-        result += sumPriceComponents(screening.getPriceComponents());
-        result += sumPriceComponents(screening.getMovie().getPriceComponentSet());
-        result += sumPriceComponents(screening.getRoom().getPriceComponents());
-        return result * seatList.size();
-    }
-
-    private int sumPriceComponents(Set<PriceComponent> setToSum) {
-        return setToSum.stream()
-                .map(PriceComponent::getValue)
-                .reduce(0, Integer::sum);
     }
 }

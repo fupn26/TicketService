@@ -15,9 +15,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Set;
+import java.util.UUID;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.core.Is.is;
+import static org.hamcrest.core.IsNot.not;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -41,17 +44,20 @@ class SeatMapperImplTest {
     private static final Room ROOM = createRoom(ROOM_NAME, ROWS, COLUMNS, Set.of());
     private static final RoomEntity ROOM_ENTITY = new RoomEntity(ROOM_NAME, ROWS, COLUMNS, Set.of());
 
-    private static final Seat SEAT = createSeat(ROOM, SEAT_ROW, SEAT_COLUMN);
+    private static final Seat SEAT = createSeat(null, ROOM, SEAT_ROW, SEAT_COLUMN);
     private static final SeatEntity SEAT_ENTITY = new SeatEntity(ROOM_ENTITY, SEAT_ROW, SEAT_COLUMN);
+    private static final UUID ID = UUID.randomUUID();
+    private static final Seat SEAT_WITH_ID = createSeat(ID, ROOM, SEAT_ROW, SEAT_COLUMN);
+    private static final SeatEntity SEAT_ENTITY_WITH_ID = new SeatEntity(ID, ROOM_ENTITY, SEAT_ROW, SEAT_COLUMN);
     private static final SeatEntity INVALID_ROW_SEAT_ENTITY = new SeatEntity(ROOM_ENTITY,
             INVALID_SEAT_ROW, SEAT_COLUMN);
     private static final SeatEntity INVALID_COLUMN_SEAT_ENTITY = new SeatEntity(ROOM_ENTITY,
             SEAT_ROW, INVALID_SEAT_COLUMN);
 
-    private static Seat createSeat(Room room, int row, int column) {
+    private static Seat createSeat(UUID id, Room room, int row, int column) {
         Seat result = null;
         try {
-            result = new Seat(room, row, column);
+            result = new Seat(id, room, row, column);
         } catch (InvalidRowException | InvalidColumnException e) {
             e.printStackTrace();
         }
@@ -122,7 +128,7 @@ class SeatMapperImplTest {
     }
 
     @Test
-    void testMapToSeatWithInvalidRoomColumnsSeatEntityThrowsInvalidRowException()
+    void testMapToSeatWithInvalidRoomColumnsSeatEntityThrowsInvalidColumnException()
             throws InvalidColumnException, InvalidRowException {
         //Given
         when(roomMapper.mapToRoom(any())).thenThrow(InvalidColumnException.class);
@@ -135,7 +141,20 @@ class SeatMapperImplTest {
     }
 
     @Test
-    void testMapToSeatEntityReturnsSeatEntity() {
+    void testMapToSeatWithIdSeatEntity()
+            throws InvalidColumnException, InvalidRowException {
+        //Given
+        when(roomMapper.mapToRoom(any())).thenReturn(ROOM);
+
+        //When
+        Seat actual = seatMapper.mapToSeat(SEAT_ENTITY_WITH_ID);
+
+        //Then
+        assertThat(actual.getId(), equalTo(SEAT_WITH_ID.getId()));
+    }
+
+    @Test
+    void testMapToSeatEntityWithNullIdReturnsSeatEntity() {
         //Given
         when(roomMapper.mapToRoomEntity(any())).thenReturn(ROOM_ENTITY);
 
@@ -144,6 +163,20 @@ class SeatMapperImplTest {
 
         //Then
         verify(roomMapper, times(1)).mapToRoomEntity(ROOM);
-        assertThat(actual, equalTo(SEAT_ENTITY));
+        assertThat(actual, is(not(equalTo(SEAT_ENTITY))));
     }
+
+    @Test
+    void testMapToSeatEntityWithIdReturnsSeatEntity() {
+        //Given
+        when(roomMapper.mapToRoomEntity(any())).thenReturn(ROOM_ENTITY);
+
+        //When
+        SeatEntity actual = seatMapper.mapToSeatEntity(SEAT_WITH_ID);
+
+        //Then
+        verify(roomMapper, times(1)).mapToRoomEntity(ROOM);
+        assertThat(actual, equalTo(SEAT_ENTITY_WITH_ID));
+    }
+
 }

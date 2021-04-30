@@ -12,6 +12,8 @@ import com.epam.training.ticketservice.repository.exception.RoomNotFoundExceptio
 import com.epam.training.ticketservice.repository.exception.ScreeningNotFoundException;
 import com.epam.training.ticketservice.repository.exception.SeatNotFoundException;
 import com.epam.training.ticketservice.service.BookingService;
+import com.epam.training.ticketservice.service.exception.NoSignedInAccountException;
+import com.epam.training.ticketservice.service.exception.PrivilegedAccountException;
 import com.epam.training.ticketservice.service.exception.SeatAlreadyBookedException;
 import com.epam.training.ticketservice.service.exception.SeatDuplicatedException;
 import org.junit.jupiter.api.Test;
@@ -106,7 +108,7 @@ class BookingControllerTest {
             SEAT_1.getRowNum(), SEAT_1.getColumnNum(), SEAT_2.getRowNum(), SEAT_2.getColumnNum());
     private static final String BOOK_SUCCESS_MESSAGE
             = String.format("Seats booked: %s; the price for this booking is %d HUF", SEAT_STRING_LIST_OUTPUT,
-            BASE_PRICE * 2);
+            BASE_PRICE);
     private static final String SEAT_LIST_PARSE_ERROR
             = "Seat list can't be parsed. Use this format: '<row>,<column> <row>,<column>'";
 
@@ -132,10 +134,6 @@ class BookingControllerTest {
         return result;
     }
 
-    private static final MovieNotFoundException MOVIE_NOT_FOUND_EXCEPTION
-            = new MovieNotFoundException("Movie not found");
-    private static final RoomNotFoundException ROOM_NOT_FOUND_EXCEPTION
-            = new RoomNotFoundException("Room not found");
     private static final SeatDuplicatedException SEAT_DUPLICATED_EXCEPTION
             = new SeatDuplicatedException("Seat duplicated");
     private static final ScreeningNotFoundException SCREENING_NOT_FOUND_EXCEPTION
@@ -148,9 +146,11 @@ class BookingControllerTest {
             = new SeatAlreadyBookedException("Seat already booked", SEAT_1);
     private static final String SEAT_ALREADY_TAKEN_MESSAGE = String.format("Seat (%d,%d) is already taken",
             SEAT_1.getRowNum(), SEAT_1.getColumnNum());
+
     @Test
-    void testBookWithValidInputReturnsSuccessString() throws SeatAlreadyBookedException, RoomNotFoundException,
-            MovieNotFoundException, SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException {
+    void testBookWithValidInputReturnsSuccessString() throws SeatAlreadyBookedException,
+            SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException,
+            PrivilegedAccountException, NoSignedInAccountException {
         //Given
         when(bookingService.createBooking(any(), any(), any(), any())).thenReturn(BOOKING);
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
@@ -178,8 +178,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void testBookWithSemicolonSeatListReturnsSeatParseErrorString() throws SeatAlreadyBookedException, RoomNotFoundException,
-            MovieNotFoundException, SeatDuplicatedException, SeatNotFoundException {
+    void testBookWithSemicolonSeatListReturnsSeatParseErrorString() {
         //Given
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
 
@@ -192,8 +191,7 @@ class BookingControllerTest {
     }
 
     @Test
-    void testBookWithMultipleSpaceSeatListReturnsSeatParseErrorString() throws SeatAlreadyBookedException, RoomNotFoundException,
-            MovieNotFoundException, SeatDuplicatedException, SeatNotFoundException {
+    void testBookWithMultipleSpaceSeatListReturnsSeatParseErrorString() {
         //Given
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
 
@@ -206,38 +204,9 @@ class BookingControllerTest {
     }
 
     @Test
-    void testBookWithNonExistingMovieReturnsMovieNotFoundExceptionMessage() throws SeatAlreadyBookedException, RoomNotFoundException,
-            MovieNotFoundException, SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException {
-        //Given
-        when(bookingService.createBooking(any(), any(), any(), any())).thenThrow(MOVIE_NOT_FOUND_EXCEPTION);
-        when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
-
-        //When
-        String actual = bookingController.book(MOVIE_TITLE, ROOM_NAME, TIME_STRING, SEAT_STRING_LIST_INPUT);
-
-        //Then
-        assertThat(actual, equalTo(MOVIE_NOT_FOUND_EXCEPTION.getMessage()));
-    }
-
-    @Test
-    void testBookWithNonExistingRoomReturnsRoomNotFoundExceptionMessage() throws SeatAlreadyBookedException,
-            RoomNotFoundException, MovieNotFoundException, SeatDuplicatedException,
-            SeatNotFoundException, ScreeningNotFoundException {
-        //Given
-        when(bookingService.createBooking(any(), any(), any(), any())).thenThrow(ROOM_NOT_FOUND_EXCEPTION);
-        when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
-
-        //When
-        String actual = bookingController.book(MOVIE_TITLE, ROOM_NAME, TIME_STRING, SEAT_STRING_LIST_INPUT);
-
-        //Then
-        assertThat(actual, equalTo(ROOM_NOT_FOUND_EXCEPTION.getMessage()));
-    }
-
-    @Test
     void testBookWithNonExistingScreeningReturnsScreeningNotFoundExceptionMessage() throws SeatAlreadyBookedException,
-            RoomNotFoundException, MovieNotFoundException, SeatDuplicatedException,
-            SeatNotFoundException, ScreeningNotFoundException {
+            SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException,
+            PrivilegedAccountException, NoSignedInAccountException {
         //Given
         when(bookingService.createBooking(any(), any(), any(), any())).thenThrow(SCREENING_NOT_FOUND_EXCEPTION);
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
@@ -251,8 +220,8 @@ class BookingControllerTest {
 
     @Test
     void testBookWithDuplicatedSeatReturnsSeatDuplicatedExceptionMessage() throws SeatAlreadyBookedException,
-            RoomNotFoundException, MovieNotFoundException, SeatDuplicatedException,
-            SeatNotFoundException, ScreeningNotFoundException {
+            SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException,
+            PrivilegedAccountException, NoSignedInAccountException {
         //Given
         when(bookingService.createBooking(any(), any(), any(), any())).thenThrow(SEAT_DUPLICATED_EXCEPTION);
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
@@ -266,8 +235,8 @@ class BookingControllerTest {
 
     @Test
     void testBookWithNotExistingSeatReturnsSeatNotFoundMessage() throws SeatAlreadyBookedException,
-            RoomNotFoundException, MovieNotFoundException, SeatDuplicatedException,
-            SeatNotFoundException, ScreeningNotFoundException {
+            SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException,
+            PrivilegedAccountException, NoSignedInAccountException {
         //Given
         when(bookingService.createBooking(any(), any(), any(), any())).thenThrow(SEAT_NOT_FOUND_EXCEPTION);
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
@@ -281,8 +250,8 @@ class BookingControllerTest {
 
     @Test
     void testBookWithBookedSeatReturnsSeatAlreadyTakenMessage() throws SeatAlreadyBookedException,
-            RoomNotFoundException, MovieNotFoundException, SeatDuplicatedException,
-            SeatNotFoundException, ScreeningNotFoundException {
+            SeatDuplicatedException, SeatNotFoundException, ScreeningNotFoundException,
+            PrivilegedAccountException, NoSignedInAccountException {
         //Given
         when(bookingService.createBooking(any(), any(), any(), any())).thenThrow(SEAT_ALREADY_BOOKED_EXCEPTION);
         when(dateTimeMapper.mapToLocalDateTime(any(), any())).thenReturn(TIME);
