@@ -6,16 +6,16 @@ import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.repository.RoomRepository;
 import com.epam.training.ticketservice.repository.SeatRepository;
-import com.epam.training.ticketservice.repository.exception.*;
-import com.epam.training.ticketservice.repository.mapper.RoomMapper;
+import com.epam.training.ticketservice.repository.exception.RoomAlreadyExistsException;
+import com.epam.training.ticketservice.repository.exception.RoomMalformedException;
+import com.epam.training.ticketservice.repository.exception.RoomNotFoundException;
+import com.epam.training.ticketservice.repository.exception.SeatAlreadyExistsException;
 import com.epam.training.ticketservice.service.RoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Service
 @RequiredArgsConstructor

@@ -3,7 +3,6 @@ package com.epam.training.ticketservice.domain;
 import com.epam.training.ticketservice.domain.exception.InvalidColumnException;
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 import com.epam.training.ticketservice.domain.exception.PriceComponentAlreadyAttachedException;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.HashSet;
@@ -11,7 +10,6 @@ import java.util.Objects;
 import java.util.Set;
 
 @Getter
-//@EqualsAndHashCode
 public class Room {
     private final String name;
     private final int rows;
@@ -64,8 +62,12 @@ public class Room {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Room room = (Room) o;
         return rows == room.rows && columns == room.columns && name.equals(room.name)
                 && priceComponents.equals(room.priceComponents);

@@ -7,7 +7,8 @@ import com.epam.training.ticketservice.domain.exception.InvalidMovieLengthExcept
 import com.epam.training.ticketservice.domain.exception.InvalidRowException;
 
 public interface ScreeningMapper {
-    Screening mapToScreening(ScreeningEntity screeningEntityToMap) throws InvalidMovieLengthException, InvalidColumnException, InvalidRowException;
+    Screening mapToScreening(ScreeningEntity screeningEntityToMap) throws InvalidMovieLengthException,
+            InvalidColumnException, InvalidRowException;
 
     ScreeningEntity mapToScreeningEntity(Screening screeningToMap);
 }
