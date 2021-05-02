@@ -24,7 +24,7 @@ public class GenericCliProcessStepDefs {
 
     @Given("the application is started")
     public void applicationStarted() throws IOException, InterruptedException {
-        cliProcess.run("java -jar -Dspring.profiles.active=ci ../ticket-service/target/ticket-service-0.0.1-SNAPSHOT.jar");
+        cliProcess.run("java -jar -Dspring.profiles.active= ../ticket-service/target/ticket-service-0.0.1-SNAPSHOT.jar");
     }
 
     @Given("the prompt containing {string} is printed")

@@ -64,7 +64,11 @@ public class SeatRepositoryImpl implements SeatRepository {
     @Override
     @Transactional
     public void deleteAllByRoomName(String roomName) {
-        seatDao.deleteAllByRoom_Name(roomName);
+        try {
+            seatDao.deleteAllByRoom_Name(roomName);
+        } catch (Exception e) {
+            log.error("Can't delete seats by room: {}", roomName);
+        }
     }
 
     private boolean isSeatExists(String roomName, int row, int column) {
